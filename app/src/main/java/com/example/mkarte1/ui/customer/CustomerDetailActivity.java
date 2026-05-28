@@ -47,6 +47,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerPhotos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(visitDateAdapter);
+        findViewById(R.id.buttonEditCustomer).setOnClickListener(v -> openEdit());
         findViewById(R.id.buttonDeleteCustomer).setOnClickListener(v -> confirmDelete());
     }
 
@@ -94,6 +95,12 @@ public class CustomerDetailActivity extends AppCompatActivity {
             dateGroups.add(new VisitDateAdapter.DateGroup(entry.getKey(), entry.getValue()));
         }
         return dateGroups;
+    }
+
+    private void openEdit() {
+        Intent intent = new Intent(this, CustomerRegisterActivity.class);
+        intent.putExtra("customerId", customerId);
+        startActivity(intent);
     }
 
     private void confirmDelete() {

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.mkarte1.data.AppDatabase;
 import com.example.mkarte1.data.Customer;
+import com.example.mkarte1.data.CustomerAddressExport;
 
 import java.util.List;
 
@@ -25,6 +26,13 @@ public class CustomerRepository {
         });
     }
 
+    public void update(Customer customer, Runnable callback) {
+        DbExecutor.IO.execute(() -> {
+            db.customerDao().update(customer);
+            DbExecutor.MAIN.post(callback);
+        });
+    }
+
     public void get(long id, Callback<Customer> callback) {
         DbExecutor.IO.execute(() -> {
             Customer customer = db.customerDao().getById(id);
@@ -37,6 +45,13 @@ public class CustomerRepository {
             List<Customer> customers = query == null || query.trim().isEmpty()
                     ? db.customerDao().getAllOrderByLatestPhoto()
                     : db.customerDao().search(query.trim());
+            DbExecutor.MAIN.post(() -> callback.onResult(customers));
+        });
+    }
+
+    public void listCustomerAddresses(Callback<List<CustomerAddressExport>> callback) {
+        DbExecutor.IO.execute(() -> {
+            List<CustomerAddressExport> customers = db.customerDao().getCustomerAddressList();
             DbExecutor.MAIN.post(() -> callback.onResult(customers));
         });
     }

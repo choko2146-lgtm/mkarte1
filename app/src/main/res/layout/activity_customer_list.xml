@@ -13,6 +13,13 @@
         android:hint="顧客名・フリガナ・電話番号で検索"
         android:inputType="text" />
 
+    <Button
+        android:id="@+id/buttonExportAddressCsv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="CSV住所録出力" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCustomers"
         android:layout_width="match_parent"

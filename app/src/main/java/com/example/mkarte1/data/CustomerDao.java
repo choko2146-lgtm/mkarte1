@@ -33,4 +33,9 @@ public interface CustomerDao {
             "WHERE c.name LIKE '%' || :query || '%' OR c.kana LIKE '%' || :query || '%' OR c.phone LIKE '%' || :query || '%' " +
             "GROUP BY c.id ORDER BY COALESCE(MAX(p.takenDate), '') DESC, c.updatedAt DESC")
     List<Customer> search(String query);
+
+    @Query("SELECT name, postalCode, address FROM customers " +
+            "WHERE address IS NOT NULL AND TRIM(address) != '' " +
+            "ORDER BY name")
+    List<CustomerAddressExport> getCustomerAddressList();
 }
