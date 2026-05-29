@@ -1,5 +1,21 @@
 # Codex Workflow
 
+## 作業終了時の必須更新
+
+今後の開発では、作業終了ごとに以下のMarkdownを確認し、必要があれば必ず更新する。
+
+- `docs/current_status.md`
+- `docs/error_notes.md`
+- `docs/next_tasks.md`
+
+更新方針:
+
+- `current_status.md`: 完了済み機能、作業途中機能、現在のStep、実機確認状況を更新する。
+- `error_notes.md`: Android Studio、Gradle、Room migration、Emulator、Git、実機不具合などを蓄積する。
+- `next_tasks.md`: 次に実装するStep、保留中の課題、レビュー待ち事項を更新する。
+
+Markdown更新後に変更がある場合は、ユーザーへcommitするか確認する。pushはユーザー確認後に行う。
+
 ## 基本ルール
 
 - 調査のみを依頼された場合、コード変更は禁止。
@@ -60,4 +76,3 @@ Step完了時は以下を含める。
 4. `assembleDebug` の結果
 5. 実機確認ポイント
 6. 次Stepへ進む前の注意点
-

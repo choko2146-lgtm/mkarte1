@@ -1,5 +1,114 @@
 # Error Notes
 
+## Maintenance Note
+
+作業終了ごとに、エラー・不具合・詰まった点があれば、このファイルへ追記すること。
+
+蓄積対象:
+
+- Android Studioエラー
+- Gradleエラー
+- Room migration問題
+- Emulator問題
+- Git問題
+- 実機確認で見つかった不具合
+- Codex作業中の原因調査メモ
+
+作業終了時は、あわせて以下も確認・更新すること。
+
+- `docs/current_status.md`
+- `docs/next_tasks.md`
+
+## Error Categories
+
+### Android Studio
+
+記録する内容:
+
+- エラー内容
+- 発生した操作
+- 原因
+- 解決方法
+- 解決後の効果
+
+### Gradle
+
+記録する内容:
+
+- 失敗したタスク
+- エラーメッセージ
+- 原因
+- 実行したコマンド
+- 解決方法
+
+### Room Migration
+
+記録する内容:
+
+- 変更したEntity
+- DB version
+- Migration内容
+- 既存データへの影響
+- 実機確認結果
+
+### Emulator
+
+記録する内容:
+
+- 端末/API
+- 症状
+- 原因
+- 解決方法
+- 実機との差分
+
+### Git
+
+記録する内容:
+
+- 実行したGitコマンド
+- エラー内容
+- 原因
+- 解決方法
+- push/commit状況
+
+## Error Note Template
+
+```md
+## タイトル
+
+分類:
+
+- Android Studio / Gradle / Room Migration / Emulator / Git / 実機不具合 / その他
+
+発生日:
+
+- yyyy-MM-dd
+
+エラー内容:
+
+- 
+
+発生条件:
+
+- 
+
+原因:
+
+- 
+
+解決方法:
+
+- 
+
+解決後の効果:
+
+- 
+
+関連ファイル:
+
+- 
+```
+
 ## 新規顧客登録ができない
 
 発生日:
@@ -79,4 +188,3 @@ if (isEditMode()) {
 
 - PC接続で `Android/data/com.example.mkarte1/files/Pictures/` を確認する。
 - アプリ内では `Photo.uri` に保存されたURIから表示される。
-
