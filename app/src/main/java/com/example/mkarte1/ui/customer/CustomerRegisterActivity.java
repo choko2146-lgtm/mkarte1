@@ -85,7 +85,9 @@ public class CustomerRegisterActivity extends AppCompatActivity {
 
         long now = System.currentTimeMillis();
         Customer customer = new Customer();
-        customer.id = customerId;
+        if (isEditMode()) {
+            customer.id = customerId;
+        }
         customer.name = customerName;
         customer.kana = kana.getText().toString().trim();
         customer.phone = phone.getText().toString().trim();
