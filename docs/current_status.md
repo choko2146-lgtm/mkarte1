@@ -1,0 +1,134 @@
+# Current Status
+
+## Project
+
+「おかんのカルテ」は、顧客情報と写真を紐づけて管理するAndroidアプリです。
+
+開発環境:
+
+- Android Studio
+- VS Code
+- Codex
+- Java
+- Room
+
+現在のブランチ:
+
+- `main`
+
+## 完了済み機能
+
+- カメラ撮影
+- 撮影後の顧客選択
+- 撮影後の顧客新規登録
+- 顧客登録
+- 顧客一覧
+- 顧客検索
+- 顧客詳細表示
+- 顧客編集
+- 顧客削除
+- 顧客別写真表示
+- 写真詳細表示
+- 写真メモ編集
+- 写真削除
+- 来店履歴カレンダー
+- 日付別来店顧客表示
+- CSV住所録出力
+
+## 作業途中機能
+
+- アプリ内写真一覧
+
+進捗:
+
+- Step 1完了: `photos` テーブルから全写真を取得するDAO/Repositoryメソッドを追加済み。
+- UI、Activity、Adapter、画面導線は未実装。
+
+## Room構成
+
+Database:
+
+- `AppDatabase`
+- DB名: `okannokarte.db`
+- version: `1`
+- `exportSchema = false`
+
+Entities:
+
+- `Customer`
+- `Photo`
+
+DAOs:
+
+- `CustomerDao`
+- `PhotoDao`
+
+Repositories:
+
+- `CustomerRepository`
+- `PhotoRepository`
+
+## Calendar実装状況
+
+実装済み:
+
+- `CalendarActivity`
+- `VisitHistoryAdapter`
+- `PhotoDao.getDistinctTakenDates()`
+- `PhotoDao.getByTakenDate(String takenDate)`
+- `PhotoRepository.listTakenDates()`
+- `PhotoRepository.listForDate(String takenDate)`
+
+画面遷移:
+
+- カレンダーの日付選択
+- 日付別の来店顧客表示
+- 顧客タップで `CustomerDetailActivity` へ遷移
+
+## CSV出力状況
+
+実装済み:
+
+- `CustomerAddressExport`
+- `CustomerDao.getCustomerAddressList()`
+- `CustomerRepository.listCustomerAddresses()`
+- `CustomerAddressCsvUtil`
+- `CsvShareUtil`
+- `file_paths.xml` の `cache-path`
+- `CustomerListActivity` の「CSV住所録出力」ボタン
+
+CSV仕様:
+
+- UTF-8
+- ファイル名: `customer_address_yyyyMMdd.csv`
+- ヘッダー: `顧客名,郵便番号,住所`
+- 保存先: `context.getCacheDir()`
+- 共有: `ACTION_SEND`
+- URI: FileProviderの `content://` URI
+- 住所未入力顧客は除外
+
+## 写真管理状況
+
+写真保存先:
+
+- `context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)`
+
+実機上の想定パス:
+
+```text
+/storage/emulated/0/Android/data/com.example.mkarte1/files/Pictures/<APP_FOLDER>/<顧客名>/
+```
+
+保存ファイル名:
+
+```text
+yyyyMMdd_<顧客名>.jpg
+yyyyMMdd_<顧客名>_01.jpg
+```
+
+注意:
+
+- MediaStore登録はしていない。
+- 通常のギャラリーには基本的に表示されない。
+- アプリ内では `Photo.uri` に保存した `file://` URIで表示している。
+
