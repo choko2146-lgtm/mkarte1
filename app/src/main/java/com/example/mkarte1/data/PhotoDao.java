@@ -22,6 +22,9 @@ public interface PhotoDao {
     @Query("SELECT * FROM photos WHERE id = :id")
     Photo getById(long id);
 
+    @Query("SELECT * FROM photos ORDER BY takenDate DESC, createdAt DESC")
+    List<Photo> getAllPhotos();
+
     @Query("SELECT * FROM photos WHERE customerId = :customerId ORDER BY takenDate DESC, createdAt DESC")
     List<Photo> getByCustomerId(long customerId);
 

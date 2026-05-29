@@ -39,6 +39,13 @@ public class PhotoRepository {
         });
     }
 
+    public void listAll(Callback<List<Photo>> callback) {
+        DbExecutor.IO.execute(() -> {
+            List<Photo> photos = db.photoDao().getAllPhotos();
+            DbExecutor.MAIN.post(() -> callback.onResult(photos));
+        });
+    }
+
     public void listForCustomer(long customerId, Callback<List<Photo>> callback) {
         DbExecutor.IO.execute(() -> {
             List<Photo> photos = db.photoDao().getByCustomerId(customerId);
