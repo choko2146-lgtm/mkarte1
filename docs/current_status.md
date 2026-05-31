@@ -64,7 +64,8 @@
 - `AndroidManifest.xml` への画面登録済み。
 - Step 3完了: `PhotoListAdapter` と `item_photo_list.xml` を追加済み。
 - 写真一覧画面でサムネイル、顧客名、撮影日、メモを表示。
-- 写真タップ遷移、`MainActivity` からの画面導線は未実装。
+- Step 4完了: 写真一覧の行タップで `CustomerDetailActivity` へ遷移。
+- `MainActivity` からの画面導線は未実装。
 
 ## Room構成
 

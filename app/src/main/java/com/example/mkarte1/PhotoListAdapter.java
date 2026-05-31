@@ -19,7 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Holder> {
+    public interface OnClick {
+        void onClick(Photo photo);
+    }
+
     private final List<Photo> photos = new ArrayList<>();
+    private final OnClick onClick;
+
+    public PhotoListAdapter(OnClick onClick) {
+        this.onClick = onClick;
+    }
 
     public void submit(List<Photo> values) {
         photos.clear();
@@ -47,6 +56,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Hold
         String memo = resolveMemo(photo);
         holder.textMemo.setText(memo);
         holder.textMemo.setVisibility(memo.isEmpty() ? View.GONE : View.VISIBLE);
+        holder.itemView.setOnClickListener(v -> onClick.onClick(photo));
     }
 
     @Override
