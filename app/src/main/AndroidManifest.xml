@@ -29,6 +29,9 @@
         </provider>
 
         <activity
+            android:name=".PhotoListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.photo.PhotoDetailActivity"
             android:exported="false" />
         <activity

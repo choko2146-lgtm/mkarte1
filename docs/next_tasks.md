@@ -29,8 +29,8 @@
 進め方:
 
 1. Step 1: 全写真取得処理追加済み。
-2. Step 2: `PhotoListActivity` とレイアウトを追加する。
-3. Step 3: `PhotoListAdapter` を追加し、サムネイル表示する。
+2. Step 2: `PhotoListActivity` とレイアウト追加済み。
+3. Step 3: `PhotoListAdapter` を追加し、暫定Adapterから差し替えてサムネイル表示する。
 4. Step 4: 写真タップで `CustomerDetailActivity` へ遷移する。
 5. Step 5: `MainActivity` に「写真一覧」導線を追加する。
 6. Step 6: 実機確認する。

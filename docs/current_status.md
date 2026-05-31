@@ -60,7 +60,10 @@
 進捗:
 
 - Step 1完了: `photos` テーブルから全写真を取得するDAO/Repositoryメソッドを追加済み。
-- UI、Activity、Adapter、画面導線は未実装。
+- Step 2完了: `PhotoListActivity` と `activity_photo_list.xml` を追加済み。
+- `AndroidManifest.xml` への画面登録済み。
+- 暫定的にActivity内の簡易テキストAdapterで写真データ取得結果を表示。
+- 正式な `PhotoListAdapter`、サムネイル表示、写真タップ遷移、`MainActivity` からの画面導線は未実装。
 
 ## Room構成
 
