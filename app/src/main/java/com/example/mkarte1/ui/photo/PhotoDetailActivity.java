@@ -59,7 +59,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
         }
         new AlertDialog.Builder(this)
                 .setTitle("写真を削除しますか？")
-                .setMessage("端末内の画像も削除されます。")
+                .setMessage("削除した写真は元に戻せません。\n端末内の画像も削除されます。")
                 .setPositiveButton("削除", (dialog, which) -> {
                     PhotoFileUtil.deleteQuietly(photo.uri);
                     repository.delete(photo, () -> {
