@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.PhotoRepository;
-import com.example.mkarte1.ui.customer.CustomerDetailActivity;
+import com.example.mkarte1.ui.photo.PhotoDetailActivity;
 
 public class PhotoListActivity extends AppCompatActivity {
     private PhotoRepository photoRepository;
@@ -30,7 +30,7 @@ public class PhotoListActivity extends AppCompatActivity {
         recyclerPhotos = findViewById(R.id.recyclerPhotos);
         textNoPhotos = findViewById(R.id.textNoPhotos);
 
-        adapter = new PhotoListAdapter(this::openCustomerDetail);
+        adapter = new PhotoListAdapter(this::openPhotoDetail);
         recyclerPhotos.setLayoutManager(new LinearLayoutManager(this));
         recyclerPhotos.setAdapter(adapter);
     }
@@ -50,14 +50,14 @@ public class PhotoListActivity extends AppCompatActivity {
         });
     }
 
-    private void openCustomerDetail(Photo photo) {
-        if (photo == null || photo.customerId <= 0) {
-            Toast.makeText(this, "顧客情報を開けません", Toast.LENGTH_SHORT).show();
+    private void openPhotoDetail(Photo photo) {
+        if (photo == null || photo.id <= 0) {
+            Toast.makeText(this, "写真情報を開けません", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Intent intent = new Intent(this, CustomerDetailActivity.class);
-        intent.putExtra("customerId", photo.customerId);
+        Intent intent = new Intent(this, PhotoDetailActivity.class);
+        intent.putExtra("photoId", photo.id);
         startActivity(intent);
     }
 }
