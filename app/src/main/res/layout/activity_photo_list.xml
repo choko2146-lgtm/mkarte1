@@ -16,10 +16,26 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/editPhotoSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:hint="顧客名・メモで検索"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/spinnerPhotoSort"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
