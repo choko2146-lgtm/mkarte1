@@ -24,5 +24,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, CustomerListActivity.class)));
         findViewById(R.id.buttonCalendar).setOnClickListener(v ->
                 startActivity(new Intent(this, CalendarActivity.class)));
+        findViewById(R.id.buttonPhotoList).setOnClickListener(v ->
+                startActivity(new Intent(this, PhotoListActivity.class)));
     }
 }

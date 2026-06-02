@@ -32,7 +32,7 @@
 2. Step 2: `PhotoListActivity` とレイアウト追加済み。
 3. Step 3: `PhotoListAdapter` を追加し、サムネイル表示済み。
 4. Step 4: 写真タップで `CustomerDetailActivity` へ遷移済み。
-5. Step 5: `MainActivity` に「写真一覧」導線を追加する。
+5. Step 5: `MainActivity` に「写真一覧」導線を追加済み。
 6. Step 6: 実機確認する。
 
 注意:

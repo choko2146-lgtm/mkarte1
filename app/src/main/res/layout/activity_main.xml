@@ -1,50 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:fillViewport="true">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="48dp"
-        android:gravity="center"
-        android:text="おかんのカルテ"
-        android:textColor="#2E2A26"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <Button
-        android:id="@+id/buttonCamera"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginBottom="20dp"
-        android:text="カメラ"
-        android:textSize="20sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="48dp"
+            android:gravity="center"
+            android:text="おかんのカルテ"
+            android:textColor="#2E2A26"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/buttonCustomerRegister"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginBottom="20dp"
-        android:text="顧客登録"
-        android:textSize="20sp" />
+        <Button
+            android:id="@+id/buttonCamera"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="20dp"
+            android:text="カメラ"
+            android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/buttonCustomerList"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginBottom="20dp"
-        android:text="顧客一覧"
-        android:textSize="20sp" />
-    <Button
-        android:id="@+id/buttonCalendar"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:text="&#12459;&#12524;&#12531;&#12480;&#12540;"
-        android:textSize="20sp" />
-</LinearLayout>
+        <Button
+            android:id="@+id/buttonCustomerRegister"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="20dp"
+            android:text="顧客登録"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonCustomerList"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="20dp"
+            android:text="顧客一覧"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="20dp"
+            android:text="&#12459;&#12524;&#12531;&#12480;&#12540;"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonPhotoList"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="写真一覧"
+            android:textSize="20sp" />
+    </LinearLayout>
+</ScrollView>

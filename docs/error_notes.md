@@ -188,3 +188,40 @@ if (isEditMode()) {
 
 - PC接続で `Android/data/com.example.mkarte1/files/Pictures/` を確認する。
 - アプリ内では `Photo.uri` に保存されたURIから表示される。
+
+## assembleDebug実行時にJDK参照が不正になる
+
+分類:
+
+- Gradle
+
+発生日:
+
+- 2026-06-02
+
+エラー内容:
+
+- `JAVA_HOME is not set and no 'java' command could be found in your PATH.`
+- `jlink executable C:\Users\YRhei\.vscode\extensions\redhat.java-1.54.0-win32-x64\jre\21.0.10-win32-x86_64\bin\jlink.exe does not exist.`
+
+発生条件:
+
+- 写真一覧機能Step 5の確認で `assembleDebug` を実行した時。
+
+原因:
+
+- シェル環境で `JAVA_HOME` が未設定だった。
+- 既存のGradle daemonがVS Code拡張内のJREを参照していた。
+
+解決方法:
+
+- Android Studio同梱JBRを `JAVA_HOME` に指定した。
+- Gradle daemonを停止してから再度 `assembleDebug` を実行した。
+
+解決後の効果:
+
+- `assembleDebug` が成功した。
+
+関連ファイル:
+
+- なし
