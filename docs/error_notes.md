@@ -272,3 +272,44 @@ if (isEditMode()) {
 - `app/src/main/java/com/example/mkarte1/data/PhotoDao.java`
 - `app/src/main/java/com/example/mkarte1/PhotoListActivity.java`
 - `app/src/main/java/com/example/mkarte1/PhotoListAdapter.java`
+
+## 顧客一覧で特定顧客の行が選択状態のように見える
+
+分類:
+
+- 実機不具合 / 顧客一覧 / 表示状態
+
+発生日:
+
+- 2026-06-02
+
+エラー内容:
+
+- 顧客一覧で「河上」の行のみ、選択状態またはアクティブ状態のような水色〜緑色の枠が常時表示されていた。
+
+発生条件:
+
+- 顧客一覧画面で「河上」の行を表示した時。
+
+原因推測:
+
+- 既存不整合データの影響。
+- RecyclerViewのViewHolder再利用時にselected / activated状態が残っていた可能性。
+- 既存コードでは`selected` / `activated`は明示的に使っていないが、`CustomerAdapter`に`selectedId`一致時だけ薄い緑背景にする処理がある。
+
+対応:
+
+- ユーザー操作により該当顧客「河上」を削除。
+- 削除後、現象は解消したように見える。
+- 現時点では他顧客で再発なし。
+- 今回はコード修正せず、実機確認記録として残す。
+
+今後確認:
+
+- 他の顧客で同様の表示状態が再発しないか確認。
+- 再発した場合は`CustomerAdapter`の`onBindViewHolder()`でselected / activated / 背景状態の明示リセットを検討する。
+
+関連ファイル:
+
+- `app/src/main/java/com/example/mkarte1/ui/customer/CustomerAdapter.java`
+- `app/src/main/java/com/example/mkarte1/ui/customer/CustomerListActivity.java`
