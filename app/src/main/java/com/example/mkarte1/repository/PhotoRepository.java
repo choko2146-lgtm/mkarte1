@@ -73,4 +73,11 @@ public class PhotoRepository {
             DbExecutor.MAIN.post(callback);
         });
     }
+
+    public void updateCustomerNameForCustomer(long customerId, String customerName, Runnable callback) {
+        DbExecutor.IO.execute(() -> {
+            db.photoDao().updateCustomerNameByCustomerId(customerId, customerName);
+            DbExecutor.MAIN.post(callback);
+        });
+    }
 }

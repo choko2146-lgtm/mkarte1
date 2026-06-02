@@ -99,8 +99,10 @@ public class CustomerRegisterActivity extends AppCompatActivity {
 
         if (editingCustomer != null) {
             customerRepository.update(customer, () -> {
-                Toast.makeText(this, "更新しました", Toast.LENGTH_SHORT).show();
-                finish();
+                photoRepository.updateCustomerNameForCustomer(customer.id, customer.name, () -> {
+                    Toast.makeText(this, "更新しました", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
             });
             return;
         }

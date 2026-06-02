@@ -39,4 +39,7 @@ public interface PhotoDao {
 
     @Query("SELECT MAX(takenDate) FROM photos WHERE customerId = :customerId")
     String latestTakenDate(long customerId);
+
+    @Query("UPDATE photos SET customerName = :customerName WHERE customerId = :customerId")
+    void updateCustomerNameByCustomerId(long customerId, String customerName);
 }
