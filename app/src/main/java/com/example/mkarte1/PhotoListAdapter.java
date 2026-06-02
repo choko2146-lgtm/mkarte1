@@ -31,11 +31,49 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Hold
     }
 
     public void submit(List<Photo> values) {
+        if (hasSameContent(values)) {
+            return;
+        }
+
         photos.clear();
         if (values != null) {
             photos.addAll(values);
         }
         notifyDataSetChanged();
+    }
+
+    private boolean hasSameContent(List<Photo> values) {
+        int newSize = values == null ? 0 : values.size();
+        if (photos.size() != newSize) {
+            return false;
+        }
+        for (int i = 0; i < newSize; i++) {
+            if (!hasSameContent(photos.get(i), values.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean hasSameContent(Photo current, Photo next) {
+        if (current == next) {
+            return true;
+        }
+        if (current == null || next == null) {
+            return false;
+        }
+        return current.id == next.id
+                && current.customerId == next.customerId
+                && current.createdAt == next.createdAt
+                && sameText(current.customerName, next.customerName)
+                && sameText(current.takenDate, next.takenDate)
+                && sameText(current.fileName, next.fileName)
+                && sameText(current.uri, next.uri)
+                && sameText(current.memo, next.memo);
+    }
+
+    private boolean sameText(String current, String next) {
+        return current == null ? next == null : current.equals(next);
     }
 
     @NonNull

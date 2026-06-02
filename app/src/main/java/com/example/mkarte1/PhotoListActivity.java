@@ -2,6 +2,8 @@ package com.example.mkarte1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class PhotoListActivity extends AppCompatActivity {
+    private static final long SEARCH_DEBOUNCE_MS = 300L;
     private static final String[] SORT_OPTIONS = {
             "撮影日 新しい順",
             "撮影日 古い順",
@@ -39,8 +42,12 @@ public class PhotoListActivity extends AppCompatActivity {
     private Spinner spinnerPhotoSort;
     private PhotoListAdapter adapter;
     private final List<Photo> allPhotos = new ArrayList<>();
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private final Runnable applySearchRunnable = () -> applyFiltersAndSort(false);
     private boolean photosLoaded;
     private int selectedSortIndex;
+    private String lastAppliedQuery;
+    private int lastAppliedSortIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +81,7 @@ public class PhotoListActivity extends AppCompatActivity {
                 allPhotos.addAll(photos);
             }
             photosLoaded = true;
-            applyFiltersAndSort();
+            applyFiltersAndSort(true);
         });
     }
 
@@ -86,7 +93,7 @@ public class PhotoListActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                applyFiltersAndSort();
+                scheduleFiltersAndSort();
             }
 
             @Override
@@ -108,7 +115,7 @@ public class PhotoListActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedSortIndex = position;
-                applyFiltersAndSort();
+                applyFiltersAndSort(false);
             }
 
             @Override
@@ -117,7 +124,18 @@ public class PhotoListActivity extends AppCompatActivity {
         });
     }
 
-    private void applyFiltersAndSort() {
+    @Override
+    protected void onDestroy() {
+        searchHandler.removeCallbacks(applySearchRunnable);
+        super.onDestroy();
+    }
+
+    private void scheduleFiltersAndSort() {
+        searchHandler.removeCallbacks(applySearchRunnable);
+        searchHandler.postDelayed(applySearchRunnable, SEARCH_DEBOUNCE_MS);
+    }
+
+    private void applyFiltersAndSort(boolean force) {
         if (!photosLoaded) {
             adapter.submit(new ArrayList<>());
             recyclerPhotos.setVisibility(View.GONE);
@@ -126,6 +144,10 @@ public class PhotoListActivity extends AppCompatActivity {
         }
 
         String query = normalize(editPhotoSearch.getText().toString());
+        if (!force && query.equals(lastAppliedQuery) && selectedSortIndex == lastAppliedSortIndex) {
+            return;
+        }
+
         List<Photo> filteredPhotos = new ArrayList<>();
         for (Photo photo : allPhotos) {
             if (matchesQuery(photo, query)) {
@@ -134,6 +156,8 @@ public class PhotoListActivity extends AppCompatActivity {
         }
 
         sortPhotos(filteredPhotos);
+        lastAppliedQuery = query;
+        lastAppliedSortIndex = selectedSortIndex;
         adapter.submit(filteredPhotos);
 
         boolean hasPhotos = !filteredPhotos.isEmpty();
