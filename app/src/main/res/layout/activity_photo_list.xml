@@ -25,7 +25,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPhotos"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textNoPhotos"
@@ -34,6 +35,7 @@
             android:gravity="center"
             android:text="写真がありません"
             android:textColor="#2E2A26"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

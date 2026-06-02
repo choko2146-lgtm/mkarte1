@@ -33,7 +33,8 @@
 3. Step 3: `PhotoListAdapter` を追加し、サムネイル表示済み。
 4. Step 4: 写真タップで `CustomerDetailActivity` へ遷移済み。
 5. Step 5: `MainActivity` に「写真一覧」導線を追加済み。
-6. Step 6: 実機確認する。
+6. Step 6-1: 実機確認A対応済み。写真一覧起動時の空表示チラつきを修正済み。
+7. Step 6: B/C/Dの確認・修正へ進む。
 
 注意:
 
