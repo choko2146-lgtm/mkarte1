@@ -67,6 +67,7 @@
 - Step 4完了: 写真一覧の行タップで `CustomerDetailActivity` へ遷移。
 - Step 5完了: `MainActivity` から写真一覧導線を追加済み。
 - Step 6-1 実機確認A対応済み: 写真一覧起動時の「写真がありません」空表示チラつきを修正。
+- Step 6-2 実機確認C記録済み: 「河上」写真タップ時に顧客情報を開けない問題は、古い不整合データまたは不正`customerId`を持つ`Photo`レコードが原因と推測。ユーザー操作で該当顧客を削除済み。`Photo.customerId`は`Customer.id`へCASCADE設定されているため、関連`Photo`レコードも削除される想定。今後、再発有無を実機で確認する。
 - 次はStep 6: B/C/Dの実機確認・修正。
 
 ## Room構成

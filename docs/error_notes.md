@@ -225,3 +225,50 @@ if (isEditMode()) {
 関連ファイル:
 
 - なし
+
+## 写真一覧で特定顧客の詳細を開けない
+
+分類:
+
+- 実機不具合 / 写真一覧 / データ不整合
+
+発生日:
+
+- 2026-06-02
+
+エラー内容:
+
+- 写真一覧で「河上」の写真をタップすると「顧客情報を開けません」と表示された。
+
+発生条件:
+
+- 写真一覧画面で、過去データに紐づく可能性がある「河上」の写真をタップした時。
+
+原因推測:
+
+- 過去データに不正な`customerId`を持つ`Photo`レコードが存在していた可能性。
+- 顧客削除・再登録などで`Photo.customerId`と`Customer.id`の整合が崩れていた可能性。
+
+確認した既存仕様:
+
+- `Photo.customerId`は`Customer.id`へのForeignKeyで、`onDelete = ForeignKey.CASCADE`が設定されている。
+- `PhotoListActivity`では`photo == null`または`customerId <= 0`の場合にToastを表示し、クラッシュを回避している。
+
+対応:
+
+- ユーザー操作により該当顧客「河上」を削除。
+- `Photo.customerId`は`Customer.id`へCASCADE設定されているため、関連`Photo`レコードも削除される想定。
+- 既存の`customerId`不正時Toastによりクラッシュは回避済み。
+
+今後確認:
+
+- 写真一覧に該当写真が残らないこと。
+- 「顧客情報を開けません」Toastが再発しないこと。
+
+関連ファイル:
+
+- `app/src/main/java/com/example/mkarte1/data/Photo.java`
+- `app/src/main/java/com/example/mkarte1/data/Customer.java`
+- `app/src/main/java/com/example/mkarte1/data/PhotoDao.java`
+- `app/src/main/java/com/example/mkarte1/PhotoListActivity.java`
+- `app/src/main/java/com/example/mkarte1/PhotoListAdapter.java`
