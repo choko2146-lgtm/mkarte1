@@ -39,11 +39,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
         customerRepository = new CustomerRepository(this);
         photoRepository = new PhotoRepository(this);
 
-        visitDateAdapter = new VisitDateAdapter(photo -> {
-            Intent intent = new Intent(this, PhotoDetailActivity.class);
-            intent.putExtra("photoId", photo.id);
-            startActivity(intent);
-        });
+        visitDateAdapter = new VisitDateAdapter(this::openPhotoDetail);
         RecyclerView recyclerView = findViewById(R.id.recyclerPhotos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(visitDateAdapter);
@@ -100,6 +96,16 @@ public class CustomerDetailActivity extends AppCompatActivity {
     private void openEdit() {
         Intent intent = new Intent(this, CustomerRegisterActivity.class);
         intent.putExtra("customerId", customerId);
+        startActivity(intent);
+    }
+
+    private void openPhotoDetail(Photo photo) {
+        if (photo == null || photo.id <= 0) {
+            Toast.makeText(this, "写真を開けません", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, PhotoDetailActivity.class);
+        intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_ID, photo.id);
         startActivity(intent);
     }
 

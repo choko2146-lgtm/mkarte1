@@ -248,7 +248,7 @@ public class PhotoListActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, PhotoDetailActivity.class);
-        intent.putExtra("photoId", photo.id);
+        intent.putExtra(PhotoDetailActivity.EXTRA_PHOTO_ID, photo.id);
         startActivity(intent);
     }
 }

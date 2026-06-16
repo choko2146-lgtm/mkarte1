@@ -2,28 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/mkarte_background"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="@dimen/mkarte_screen_padding">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="顧客一覧"
+        android:textColor="@color/mkarte_text"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_input"
         android:hint="顧客名・フリガナ・電話番号で検索"
-        android:inputType="text" />
+        android:inputType="text"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:singleLine="true"
+        android:textColor="@color/mkarte_text"
+        android:textColorHint="@color/mkarte_text_subtle"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/buttonExportAddressCsv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="CSV住所録出力" />
+        android:layout_height="@dimen/mkarte_button_height"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_button_secondary"
+        android:text="CSV住所録出力"
+        android:textColor="@color/mkarte_text"
+        android:textSize="15sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCustomers"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="1" />
 </LinearLayout>

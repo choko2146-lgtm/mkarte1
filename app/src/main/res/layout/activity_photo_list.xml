@@ -2,35 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/mkarte_background"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="@dimen/mkarte_screen_padding">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:gravity="center"
         android:text="写真一覧"
-        android:textColor="#2E2A26"
-        android:textSize="30sp"
+        android:textColor="@color/mkarte_text"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editPhotoSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_input"
         android:hint="顧客名・メモで検索"
         android:inputType="text"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
         android:singleLine="true"
-        android:textSize="18sp" />
+        android:textColor="@color/mkarte_text"
+        android:textColorHint="@color/mkarte_text_subtle"
+        android:textSize="16sp" />
 
     <Spinner
         android:id="@+id/spinnerPhotoSort"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_input"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -50,7 +57,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="写真がありません"
-            android:textColor="#2E2A26"
+            android:textColor="@color/mkarte_text_subtle"
             android:textSize="18sp"
             android:visibility="gone" />
     </FrameLayout>

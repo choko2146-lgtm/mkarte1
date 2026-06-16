@@ -35,6 +35,9 @@
             android:name=".ui.photo.PhotoDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.photo.PhotoPreviewActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.customer.CustomerDetailActivity"
             android:exported="false" />
         <activity

@@ -14,6 +14,7 @@ import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.CustomerRepository;
 import com.example.mkarte1.repository.PhotoRepository;
 import com.example.mkarte1.util.DateUtil;
+import com.example.mkarte1.util.MediaStoreHelper;
 import com.example.mkarte1.util.PhotoFileUtil;
 
 import java.io.File;
@@ -122,6 +123,7 @@ public class CustomerRegisterActivity extends AppCompatActivity {
         try {
             String ymd = DateUtil.todayYmd();
             File finalFile = PhotoFileUtil.moveTempToCustomer(this, tempPath, customer, ymd);
+            MediaStoreHelper.copyToGallery(this, finalFile, finalFile.getName());
             Photo photo = new Photo();
             photo.customerId = customer.id;
             photo.customerName = customer.name;

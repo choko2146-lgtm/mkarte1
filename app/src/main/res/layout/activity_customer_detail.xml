@@ -2,35 +2,75 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/mkarte_background"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/mkarte_screen_padding">
 
     <TextView
-        android:id="@+id/textCustomer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#2E2A26"
-        android:textSize="18sp" />
+        android:text="顧客詳細"
+        android:textColor="@color/mkarte_text"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/buttonEditCustomer"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="12dp"
-        android:text="編集" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_card"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        android:padding="@dimen/mkarte_card_padding">
 
-    <Button
-        android:id="@+id/buttonDeleteCustomer"
+        <TextView
+            android:id="@+id/textCustomer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:textColor="@color/mkarte_text"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonEditCustomer"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/mkarte_button_height"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button_primary"
+                android:text="編集"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/buttonDeleteCustomer"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/mkarte_button_height"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button_danger"
+                android:text="顧客を削除"
+                android:textColor="@color/mkarte_danger" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:text="顧客を削除" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="来店履歴・写真"
+        android:textColor="@color/mkarte_text"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPhotos"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1" />
 </LinearLayout>

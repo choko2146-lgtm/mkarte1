@@ -2,32 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/mkarte_background"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="@dimen/mkarte_screen_padding">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:gravity="center"
         android:text="&#12459;&#12524;&#12531;&#12480;&#12540;"
-        android:textColor="#2E2A26"
-        android:textSize="30sp"
+        android:textColor="@color/mkarte_text"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="2"
+        android:background="@drawable/bg_card"
+        android:elevation="1dp"
         android:firstDayOfWeek="1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="来店履歴"
+        android:textColor="@color/mkarte_text"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -40,8 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="&#26469;&#24215;&#23653;&#27508;&#12394;&#12375;"
-            android:textColor="#2E2A26"
+            android:text="この日の来店履歴はありません"
+            android:textColor="@color/mkarte_text_subtle"
             android:textSize="18sp" />
     </FrameLayout>
 </LinearLayout>

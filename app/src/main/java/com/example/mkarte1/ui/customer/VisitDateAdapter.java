@@ -79,6 +79,7 @@ public class VisitDateAdapter extends RecyclerView.Adapter<VisitDateAdapter.Hold
             textTakenDate = itemView.findViewById(R.id.textTakenDate);
             RecyclerView recyclerDatePhotos = itemView.findViewById(R.id.recyclerDatePhotos);
             recyclerDatePhotos.setLayoutManager(new GridLayoutManager(itemView.getContext(), 2));
+            recyclerDatePhotos.setNestedScrollingEnabled(false);
             photoAdapter = new PhotoAdapter(onPhotoClick);
             recyclerDatePhotos.setAdapter(photoAdapter);
         }

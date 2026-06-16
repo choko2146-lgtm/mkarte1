@@ -1,6 +1,5 @@
 package com.example.mkarte1;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,7 +103,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Hold
 
     private void bindImage(ImageView imageView, Photo photo) {
         imageView.setImageDrawable(null);
-        imageView.setBackgroundColor(Color.rgb(238, 238, 238));
+        imageView.setBackgroundResource(R.drawable.bg_image_soft);
 
         if (photo.uri == null || photo.uri.trim().isEmpty()) {
             return;

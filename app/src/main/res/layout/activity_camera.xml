@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/mkarte_background"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="@dimen/mkarte_screen_padding">
 
     <TextView
         android:layout_width="match_parent"
@@ -13,20 +13,24 @@
         android:layout_marginBottom="40dp"
         android:gravity="center"
         android:text="撮影後に顧客を選択します"
-        android:textColor="#2E2A26"
+        android:textColor="@color/mkarte_text"
         android:textSize="18sp" />
 
     <Button
         android:id="@+id/buttonTakePhoto"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        android:background="@drawable/bg_button_primary"
         android:text="撮影する"
+        android:textColor="@color/white"
         android:textSize="20sp" />
 
     <Button
         android:id="@+id/buttonBack"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/mkarte_button_height"
         android:layout_marginTop="16dp"
-        android:text="戻る" />
+        android:background="@drawable/bg_button_secondary"
+        android:text="戻る"
+        android:textColor="@color/mkarte_text" />
 </LinearLayout>

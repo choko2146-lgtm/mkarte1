@@ -313,3 +313,64 @@ if (isEditMode()) {
 
 - `app/src/main/java/com/example/mkarte1/ui/customer/CustomerAdapter.java`
 - `app/src/main/java/com/example/mkarte1/ui/customer/CustomerListActivity.java`
+
+## Step 11 写真拡大表示とGalaxyギャラリー表示が動作しない
+
+分類:
+
+- 実機不具合 / 写真詳細 / MediaStore
+
+発生日:
+
+- 2026-06-16
+
+エラー内容:
+
+- 新しく撮影・保存した写真がGalaxyのギャラリーアプリに表示されない。
+- 顧客詳細画面などで写真をタップしても、写真が拡大表示されない。
+
+原因推測:
+
+- アプリ専用外部領域の写真に対して`MediaScannerConnection.scanFile()`を呼ぶだけでは、Galaxyギャラリーの表示対象にならない可能性がある。
+- 顧客詳細の顧客別写真サムネイル側で、タップ時のPhoto取得と画像表示処理が最低限だったため、実機上で導線確認しづらい状態だった。
+
+対応:
+
+- `MediaStoreHelper.copyToGallery()`を追加し、Android 10以降は`MediaStore.Images.Media.EXTERNAL_CONTENT_URI`へ`ContentResolver.insert()`して、`OutputStream`へJPEGをコピーする方式に変更。
+- ギャラリー用コピー先を`Pictures/Okannokarte/`に設定。
+- 顧客詳細の写真タップ導線を`PhotoDetailActivity.EXTRA_PHOTO_ID`で統一。
+- 顧客別写真サムネイルのクリック処理を現在のAdapter位置からPhotoを取得する形に変更。
+- `PhotoDetailActivity`で`photoId`不正・Photo未取得時のToastを追加し、`file://` URI表示を補強。
+
+確認結果:
+
+- `assembleDebug`成功。
+- 新規撮影・保存した写真がGalaxyギャラリーに表示されることを実機確認済み。
+- 顧客詳細画面の写真タップ時に拡大表示されない問題は残っていたため、写真拡大表示のみ再修正。
+- 再修正ではMediaStore周りは変更せず、顧客詳細サムネイルのクリック処理、`PhotoDetailActivity`の写真表示領域、アプリ内保存写真のデコード処理を修正。
+- 再修正後の`assembleDebug`成功。
+- 追加実機確認で、顧客詳細から`PhotoDetailActivity`へ遷移するようにはなったが、編集UIが下部に表示され、写真が横向きに回転して表示される問題を確認。
+- 追加修正で閲覧専用`PhotoPreviewActivity`を追加し、顧客詳細の写真タップ先を全画面プレビューへ変更。Exif向き補正用の`PhotoImageLoader`を追加し、`PhotoDetailActivity`にも同じ補正を適用。
+- 追加修正ではMediaStore周りは変更なし。
+- 追加修正後の`assembleDebug`成功。
+- 最終修正で、顧客詳細の写真タップ先を編集用`PhotoDetailActivity`へ戻し、`PhotoDetailActivity`の写真タップで`PhotoPreviewActivity`を開く導線に変更。
+- `PhotoPreviewActivity`に`ScaleGestureDetector`、`GestureDetector`、`Matrix`を使ったピンチズーム、拡大中ドラッグ移動、ダブルタップ拡大/リセットを追加。
+- 最終修正ではMediaStore周りは変更なし。
+- 最終修正後の`assembleDebug`成功。
+
+今後確認:
+
+- 顧客詳細画面の写真タップで`PhotoDetailActivity`に遷移し、メモ編集・削除ができること。
+- `PhotoDetailActivity`の写真タップで`PhotoPreviewActivity`に遷移し、黒背景の閲覧専用画面で正しい向きの写真が大きく表示されること。
+- `PhotoPreviewActivity`でピンチズーム、拡大中ドラッグ移動、ダブルタップ拡大/リセット、Android戻るボタンが動作すること。
+
+関連ファイル:
+
+- `app/src/main/java/com/example/mkarte1/util/MediaStoreHelper.java`
+- `app/src/main/java/com/example/mkarte1/ui/customer/PhotoAdapter.java`
+- `app/src/main/java/com/example/mkarte1/ui/customer/CustomerDetailActivity.java`
+- `app/src/main/java/com/example/mkarte1/ui/photo/PhotoDetailActivity.java`
+- `app/src/main/java/com/example/mkarte1/ui/photo/PhotoPreviewActivity.java`
+- `app/src/main/java/com/example/mkarte1/util/PhotoImageLoader.java`
+- `app/src/main/java/com/example/mkarte1/ui/camera/PhotoCustomerSelectActivity.java`
+- `app/src/main/java/com/example/mkarte1/ui/customer/CustomerRegisterActivity.java`
