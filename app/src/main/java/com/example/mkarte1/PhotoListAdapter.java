@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.util.DateUtil;
+import com.example.mkarte1.util.PhotoImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -105,24 +106,21 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Hold
         imageView.setImageDrawable(null);
         imageView.setBackgroundResource(R.drawable.bg_image_soft);
 
-        if (photo.uri == null || photo.uri.trim().isEmpty()) {
+        if (photo == null || photo.uri == null || photo.uri.trim().isEmpty()) {
             return;
         }
 
         try {
             Uri uri = Uri.parse(photo.uri);
-            if ("file".equals(uri.getScheme()) && !fileExists(uri)) {
-                return;
+            if ("file".equals(uri.getScheme()) && uri.getPath() != null) {
+                File file = new File(uri.getPath());
+                if (PhotoImageLoader.loadFileInto(imageView, file)) {
+                    return;
+                }
             }
-            imageView.setImageURI(uri);
         } catch (Exception ignored) {
             imageView.setImageDrawable(null);
         }
-    }
-
-    private boolean fileExists(Uri uri) {
-        String path = uri.getPath();
-        return path != null && new File(path).exists();
     }
 
     private String resolveCustomerName(Photo photo) {

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -18,12 +19,8 @@ public final class PhotoImageLoader {
             return false;
         }
 
-        int targetWidth = imageView.getWidth() > 0
-                ? imageView.getWidth()
-                : imageView.getResources().getDisplayMetrics().widthPixels;
-        int targetHeight = imageView.getHeight() > 0
-                ? imageView.getHeight()
-                : imageView.getResources().getDisplayMetrics().heightPixels;
+        int targetWidth = resolveTargetWidth(imageView);
+        int targetHeight = resolveTargetHeight(imageView);
 
         BitmapFactory.Options bounds = new BitmapFactory.Options();
         bounds.inJustDecodeBounds = true;
@@ -39,6 +36,28 @@ public final class PhotoImageLoader {
         Bitmap rotatedBitmap = applyExifOrientation(bitmap, file);
         imageView.setImageBitmap(rotatedBitmap);
         return true;
+    }
+
+    private static int resolveTargetWidth(ImageView imageView) {
+        if (imageView.getWidth() > 0) {
+            return imageView.getWidth();
+        }
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        if (params != null && params.width > 0) {
+            return params.width;
+        }
+        return imageView.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    private static int resolveTargetHeight(ImageView imageView) {
+        if (imageView.getHeight() > 0) {
+            return imageView.getHeight();
+        }
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        if (params != null && params.height > 0) {
+            return params.height;
+        }
+        return imageView.getResources().getDisplayMetrics().heightPixels;
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options, int targetWidth, int targetHeight) {

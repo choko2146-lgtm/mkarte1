@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mkarte1.R;
 import com.example.mkarte1.data.Photo;
+import com.example.mkarte1.util.PhotoImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,12 +78,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.Holder> {
             Uri uri = Uri.parse(photo.uri);
             if ("file".equals(uri.getScheme()) && uri.getPath() != null) {
                 File file = new File(uri.getPath());
-                if (file.exists()) {
-                    imageView.setImageURI(Uri.fromFile(file));
+                if (PhotoImageLoader.loadFileInto(imageView, file)) {
                     return;
                 }
             }
-            imageView.setImageURI(uri);
         } catch (Exception ignored) {
             imageView.setImageDrawable(null);
         }
