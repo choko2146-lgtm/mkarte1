@@ -10,15 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.util.DateUtil;
-import com.example.mkarte1.util.PhotoImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Holder> {
+    private static final int THUMBNAIL_SIZE_DP = 112;
+
     public interface OnClick {
         void onClick(Photo photo);
     }
@@ -102,25 +104,62 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Hold
         return photos.size();
     }
 
+    @Override
+    public void onViewRecycled(@NonNull Holder holder) {
+        Glide.with(holder.imagePhoto).clear(holder.imagePhoto);
+        holder.imagePhoto.setImageDrawable(null);
+        super.onViewRecycled(holder);
+    }
+
     private void bindImage(ImageView imageView, Photo photo) {
+        Glide.with(imageView).clear(imageView);
         imageView.setImageDrawable(null);
         imageView.setBackgroundResource(R.drawable.bg_image_soft);
 
-        if (photo == null || photo.uri == null || photo.uri.trim().isEmpty()) {
+        Object imageModel = resolveImageModel(photo);
+        if (imageModel == null) {
             return;
         }
 
+        int size = dpToPx(imageView, THUMBNAIL_SIZE_DP);
+        Glide.with(imageView)
+                .load(imageModel)
+                .centerCrop()
+                .override(size, size)
+                .placeholder(R.drawable.bg_image_soft)
+                .error(R.drawable.bg_image_soft)
+                .fallback(R.drawable.bg_image_soft)
+                .dontAnimate()
+                .into(imageView);
+    }
+
+    private Object resolveImageModel(Photo photo) {
+        if (photo == null || photo.uri == null) {
+            return null;
+        }
+
+        String rawUri = photo.uri.trim();
+        if (rawUri.isEmpty()) {
+            return null;
+        }
+
         try {
-            Uri uri = Uri.parse(photo.uri);
+            Uri uri = Uri.parse(rawUri);
             if ("file".equals(uri.getScheme()) && uri.getPath() != null) {
-                File file = new File(uri.getPath());
-                if (PhotoImageLoader.loadFileInto(imageView, file)) {
-                    return;
-                }
+                return new File(uri.getPath());
+            }
+            if (uri.getScheme() != null) {
+                return uri;
             }
         } catch (Exception ignored) {
-            imageView.setImageDrawable(null);
+            return null;
         }
+        return new File(rawUri);
+    }
+
+    private int dpToPx(ImageView imageView, int dp) {
+        float density = imageView.getResources().getDisplayMetrics().density;
+        return Math.max(1, Math.round(dp * density));
     }
 
     private String resolveCustomerName(Photo photo) {

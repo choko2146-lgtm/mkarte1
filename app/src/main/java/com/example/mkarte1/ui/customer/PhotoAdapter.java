@@ -8,9 +8,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.mkarte1.R;
 import com.example.mkarte1.data.Photo;
-import com.example.mkarte1.util.PhotoImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,25 +66,78 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.Holder> {
         return photos.size();
     }
 
+    @Override
+    public void onViewRecycled(@NonNull Holder holder) {
+        Glide.with(holder.imageView).clear(holder.imageView);
+        holder.imageView.setImageDrawable(null);
+        super.onViewRecycled(holder);
+    }
+
     private void bindImage(ImageView imageView, Photo photo) {
+        Glide.with(imageView).clear(imageView);
         imageView.setImageDrawable(null);
         imageView.setBackgroundResource(R.drawable.bg_image_soft);
 
-        if (photo == null || photo.uri == null || photo.uri.trim().isEmpty()) {
+        Object imageModel = resolveImageModel(photo);
+        if (imageModel == null) {
             return;
         }
 
+        Glide.with(imageView)
+                .load(imageModel)
+                .centerCrop()
+                .override(resolveTargetWidth(imageView), resolveTargetHeight(imageView))
+                .placeholder(R.drawable.bg_image_soft)
+                .error(R.drawable.bg_image_soft)
+                .fallback(R.drawable.bg_image_soft)
+                .dontAnimate()
+                .into(imageView);
+    }
+
+    private Object resolveImageModel(Photo photo) {
+        if (photo == null || photo.uri == null) {
+            return null;
+        }
+
+        String rawUri = photo.uri.trim();
+        if (rawUri.isEmpty()) {
+            return null;
+        }
+
         try {
-            Uri uri = Uri.parse(photo.uri);
+            Uri uri = Uri.parse(rawUri);
             if ("file".equals(uri.getScheme()) && uri.getPath() != null) {
-                File file = new File(uri.getPath());
-                if (PhotoImageLoader.loadFileInto(imageView, file)) {
-                    return;
-                }
+                return new File(uri.getPath());
+            }
+            if (uri.getScheme() != null) {
+                return uri;
             }
         } catch (Exception ignored) {
-            imageView.setImageDrawable(null);
+            return null;
         }
+        return new File(rawUri);
+    }
+
+    private int resolveTargetWidth(ImageView imageView) {
+        if (imageView.getWidth() > 0) {
+            return imageView.getWidth();
+        }
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        if (params != null && params.width > 0) {
+            return params.width;
+        }
+        return Math.max(1, imageView.getResources().getDisplayMetrics().widthPixels / 2);
+    }
+
+    private int resolveTargetHeight(ImageView imageView) {
+        if (imageView.getHeight() > 0) {
+            return imageView.getHeight();
+        }
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        if (params != null && params.height > 0) {
+            return params.height;
+        }
+        return resolveTargetWidth(imageView);
     }
 
     private void openPhotoAt(int adapterPosition) {
