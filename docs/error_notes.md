@@ -374,3 +374,39 @@ if (isEditMode()) {
 - `app/src/main/java/com/example/mkarte1/util/PhotoImageLoader.java`
 - `app/src/main/java/com/example/mkarte1/ui/camera/PhotoCustomerSelectActivity.java`
 - `app/src/main/java/com/example/mkarte1/ui/customer/CustomerRegisterActivity.java`
+
+## Step16A assembleDebug再確認時のネットワーク制限
+
+発生内容:
+
+- `assembleDebug --console=plain` の再確認時に、Gradle wrapperが配布zipを取得しようとして、サンドボックスのネットワーク制限により `java.net.SocketException: Permission denied: getsockopt` が発生。
+
+原因:
+
+- 実装コードやリソースの不備ではなく、制限環境内でGradle配布zipのネットワーク取得がブロックされたため。
+
+対応:
+
+- 権限付きで同じ `assembleDebug --console=plain` を再実行し、`BUILD SUCCESSFUL` を確認。
+
+補足:
+
+- Step16AのUI実装に起因するビルドエラーはなし。
+
+## Step16A-2 assembleDebug再確認時のネットワーク制限
+
+発生内容:
+
+- `assembleDebug --console=plain` 実行時に、Gradle wrapperが配布zipを取得しようとして、サンドボックスのネットワーク制限により `java.net.SocketException: Permission denied: getsockopt` が発生。
+
+原因:
+
+- 実装コードやリソースの不備ではなく、制限環境内でGradle配布zipのネットワーク取得がブロックされたため。
+
+対応:
+
+- 権限付きで同じ `assembleDebug --console=plain` を再実行し、`BUILD SUCCESSFUL` を確認。
+
+補足:
+
+- Step16A-2のUI実装に起因するビルドエラーはなし。
