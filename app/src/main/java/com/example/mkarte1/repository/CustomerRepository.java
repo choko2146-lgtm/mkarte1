@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.mkarte1.data.AppDatabase;
 import com.example.mkarte1.data.Customer;
 import com.example.mkarte1.data.CustomerAddressExport;
+import com.example.mkarte1.data.CustomerWithLatestDate;
 
 import java.util.List;
 
@@ -45,6 +46,15 @@ public class CustomerRepository {
             List<Customer> customers = query == null || query.trim().isEmpty()
                     ? db.customerDao().getAllOrderByLatestPhoto()
                     : db.customerDao().search(query.trim());
+            DbExecutor.MAIN.post(() -> callback.onResult(customers));
+        });
+    }
+
+    public void listWithLatestDate(String query, Callback<List<CustomerWithLatestDate>> callback) {
+        DbExecutor.IO.execute(() -> {
+            List<CustomerWithLatestDate> customers = query == null || query.trim().isEmpty()
+                    ? db.customerDao().getAllWithLatestDate()
+                    : db.customerDao().searchWithLatestDate(query.trim());
             DbExecutor.MAIN.post(() -> callback.onResult(customers));
         });
     }

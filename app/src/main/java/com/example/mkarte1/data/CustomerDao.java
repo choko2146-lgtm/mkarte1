@@ -29,10 +29,19 @@ public interface CustomerDao {
             "GROUP BY c.id ORDER BY COALESCE(MAX(p.takenDate), '') DESC, c.updatedAt DESC")
     List<Customer> getAllOrderByLatestPhoto();
 
+    @Query("SELECT c.*, MAX(p.takenDate) AS latestTakenDate FROM customers c LEFT JOIN photos p ON p.customerId = c.id " +
+            "GROUP BY c.id ORDER BY COALESCE(MAX(p.takenDate), '') DESC, c.updatedAt DESC")
+    List<CustomerWithLatestDate> getAllWithLatestDate();
+
     @Query("SELECT c.* FROM customers c LEFT JOIN photos p ON p.customerId = c.id " +
             "WHERE c.name LIKE '%' || :query || '%' OR c.kana LIKE '%' || :query || '%' OR c.phone LIKE '%' || :query || '%' " +
             "GROUP BY c.id ORDER BY COALESCE(MAX(p.takenDate), '') DESC, c.updatedAt DESC")
     List<Customer> search(String query);
+
+    @Query("SELECT c.*, MAX(p.takenDate) AS latestTakenDate FROM customers c LEFT JOIN photos p ON p.customerId = c.id " +
+            "WHERE c.name LIKE '%' || :query || '%' OR c.kana LIKE '%' || :query || '%' OR c.phone LIKE '%' || :query || '%' " +
+            "GROUP BY c.id ORDER BY COALESCE(MAX(p.takenDate), '') DESC, c.updatedAt DESC")
+    List<CustomerWithLatestDate> searchWithLatestDate(String query);
 
     @Query("SELECT name, postalCode, address FROM customers " +
             "WHERE address IS NOT NULL AND TRIM(address) != '' " +

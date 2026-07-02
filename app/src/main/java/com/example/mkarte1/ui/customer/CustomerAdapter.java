@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mkarte1.R;
 import com.example.mkarte1.data.Customer;
+import com.example.mkarte1.data.CustomerWithLatestDate;
+import com.example.mkarte1.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +22,33 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Holder
         void onClick(Customer customer);
     }
 
-    private final List<Customer> customers = new ArrayList<>();
+    private final List<CustomerWithLatestDate> customers = new ArrayList<>();
     private final OnClick onClick;
+    private final boolean showLatestVisitDate;
     private long selectedId = -1;
 
     public CustomerAdapter(OnClick onClick) {
-        this.onClick = onClick;
+        this(onClick, false);
     }
 
-    public void submit(List<Customer> values) {
+    public CustomerAdapter(OnClick onClick, boolean showLatestVisitDate) {
+        this.onClick = onClick;
+        this.showLatestVisitDate = showLatestVisitDate;
+    }
+
+    public void submit(List<CustomerWithLatestDate> values) {
         customers.clear();
         customers.addAll(values);
+        notifyDataSetChanged();
+    }
+
+    public void submitCustomers(List<Customer> values) {
+        customers.clear();
+        for (Customer customer : values) {
+            CustomerWithLatestDate row = new CustomerWithLatestDate();
+            row.customer = customer;
+            customers.add(row);
+        }
         notifyDataSetChanged();
     }
 
@@ -81,23 +99,30 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Holder
         TextView detail = new TextView(parent.getContext());
         detail.setTextSize(14);
         detail.setTextColor(parent.getResources().getColor(R.color.mkarte_text_subtle, null));
+        TextView latestVisitDate = new TextView(parent.getContext());
+        latestVisitDate.setTextSize(14);
+        latestVisitDate.setTextColor(parent.getResources().getColor(R.color.mkarte_text_subtle, null));
         TextView address = new TextView(parent.getContext());
         address.setTextSize(13);
         address.setTextColor(parent.getResources().getColor(R.color.mkarte_text_subtle, null));
 
         content.addView(title);
+        content.addView(latestVisitDate);
         content.addView(detail);
         content.addView(address);
         layout.addView(avatar);
         layout.addView(content);
-        return new Holder(layout, avatar, title, detail, address);
+        return new Holder(layout, avatar, title, latestVisitDate, detail, address);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        Customer customer = customers.get(position);
+        CustomerWithLatestDate row = customers.get(position);
+        Customer customer = row.customer;
         holder.avatar.setText(resolveInitial(customer.name));
         holder.title.setText(customer.name);
+        holder.latestVisitDate.setText(formatLatestVisitDate(row.latestTakenDate));
+        holder.latestVisitDate.setVisibility(showLatestVisitDate ? TextView.VISIBLE : TextView.GONE);
         holder.detail.setText(resolveDetail(customer));
         String address = safe(customer.address);
         holder.address.setText(address);
@@ -130,6 +155,11 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Holder
         return kana + "  " + phone;
     }
 
+    private String formatLatestVisitDate(String latestTakenDate) {
+        String displayDate = DateUtil.displayYmd(latestTakenDate);
+        return "最終来店日：" + (displayDate.isEmpty() ? "未登録" : displayDate);
+    }
+
     private String safe(String value) {
         return value == null ? "" : value.trim();
     }
@@ -141,13 +171,15 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Holder
     static class Holder extends RecyclerView.ViewHolder {
         TextView avatar;
         TextView title;
+        TextView latestVisitDate;
         TextView detail;
         TextView address;
 
-        Holder(@NonNull LinearLayout itemView, TextView avatar, TextView title, TextView detail, TextView address) {
+        Holder(@NonNull LinearLayout itemView, TextView avatar, TextView title, TextView latestVisitDate, TextView detail, TextView address) {
             super(itemView);
             this.avatar = avatar;
             this.title = title;
+            this.latestVisitDate = latestVisitDate;
             this.detail = detail;
             this.address = address;
         }

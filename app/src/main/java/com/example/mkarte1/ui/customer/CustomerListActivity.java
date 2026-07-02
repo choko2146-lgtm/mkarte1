@@ -34,7 +34,7 @@ public class CustomerListActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CustomerDetailActivity.class);
             intent.putExtra("customerId", customer.id);
             startActivity(intent);
-        });
+        }, true);
         RecyclerView recyclerView = findViewById(R.id.recyclerCustomers);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -56,7 +56,7 @@ public class CustomerListActivity extends AppCompatActivity {
     }
 
     private void load(String query) {
-        repository.list(query, adapter::submit);
+        repository.listWithLatestDate(query, adapter::submit);
     }
 
     private void exportAddressCsv() {

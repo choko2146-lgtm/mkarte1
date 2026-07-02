@@ -75,7 +75,7 @@ public class PhotoCustomerSelectActivity extends AppCompatActivity {
     }
 
     private void load(String query) {
-        customerRepository.list(query, adapter::submit);
+        customerRepository.list(query, adapter::submitCustomers);
     }
 
     private void link() {

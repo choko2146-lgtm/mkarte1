@@ -179,3 +179,25 @@ Pictures/Okannokarte/
 - アプリ内保存ファイルは従来通り残す。
 - 既存写真の一括MediaStore登録は未実施。
 - アプリ内では `Photo.uri` に保存した `file://` URIで表示している。
+
+## Step14 顧客一覧の最終来店日表示
+
+実装済み:
+
+- `CustomerWithLatestDate` を追加し、`Customer` と `latestTakenDate` を一覧表示用にまとめて扱う。
+- `CustomerDao` に `photos.takenDate` の `MAX()` を顧客ごとに取得する一覧/検索用Queryを追加。
+- `CustomerRepository.listWithLatestDate()` を追加し、既存の登録・編集・削除処理には影響しない形で一覧専用の取得経路を追加。
+- `CustomerListActivity` は最終来店日付き一覧を取得して `CustomerAdapter` に渡す。
+- `CustomerAdapter` は顧客一覧画面のみ、顧客名の下に `最終来店日：yyyy/MM/dd` または `最終来店日：未登録` を表示する。
+- 撮影後の顧客選択画面では既存表示を維持するため、同じAdapterの最終来店日表示を無効にしている。
+
+確認済み:
+
+- `assembleDebug` 成功。
+- 実機確認OK。
+- 顧客一覧に最終来店日が表示される。
+- 写真あり顧客は `yyyy/MM/dd` 表示、写真なし顧客は `未登録` 表示。
+- 検索後も最終来店日が表示される。
+- 顧客詳細への遷移、写真一覧、写真詳細、左右移動、カレンダーが正常。
+- Entityのカラム追加なし。
+- 写真保存処理、MediaStore関連、Step12左右移動、Step13画像読み込み改善には未変更。
