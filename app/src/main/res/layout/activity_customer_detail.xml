@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="来店履歴・写真"
+        android:text="撮影履歴・写真"
         android:textColor="@color/mkarte_text"
         android:textSize="18sp"
         android:textStyle="bold" />

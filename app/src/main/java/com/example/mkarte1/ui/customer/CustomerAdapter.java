@@ -157,7 +157,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Holder
 
     private String formatLatestVisitDate(String latestTakenDate) {
         String displayDate = DateUtil.displayYmd(latestTakenDate);
-        return "最終来店日：" + (displayDate.isEmpty() ? "未登録" : displayDate);
+        return "最終撮影日：" + (displayDate.isEmpty() ? "未登録" : displayDate);
     }
 
     private String safe(String value) {

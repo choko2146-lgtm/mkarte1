@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="来店履歴"
+        android:text="撮影履歴"
         android:textColor="@color/mkarte_text"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="この日の来店履歴はありません"
+            android:text="この日の撮影履歴はありません"
             android:textColor="@color/mkarte_text_subtle"
             android:textSize="18sp" />
     </FrameLayout>
