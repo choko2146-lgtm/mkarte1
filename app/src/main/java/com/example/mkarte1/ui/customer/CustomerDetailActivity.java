@@ -15,6 +15,7 @@ import com.example.mkarte1.data.Customer;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.CustomerRepository;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.ui.photo.PhotoDetailActivity;
 import com.example.mkarte1.util.PhotoFileUtil;
 
@@ -35,9 +36,11 @@ public class CustomerDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_detail);
+        MkarteBottomNav.bind(this, R.id.navCustomers, false);
         customerId = getIntent().getLongExtra("customerId", -1);
         customerRepository = new CustomerRepository(this);
         photoRepository = new PhotoRepository(this);
+        findViewById(R.id.buttonBackCustomerDetail).setOnClickListener(v -> finish());
 
         visitDateAdapter = new VisitDateAdapter(this::openPhotoDetail);
         RecyclerView recyclerView = findViewById(R.id.recyclerPhotos);
@@ -60,17 +63,20 @@ public class CustomerDetailActivity extends AppCompatActivity {
                 finish();
                 return;
             }
+            ((TextView) findViewById(R.id.textCustomerInitial)).setText(resolveInitial(customer.name));
+            ((TextView) findViewById(R.id.textCustomerName)).setText(safe(customer.name));
+            ((TextView) findViewById(R.id.textCustomerKana)).setText(fallback(customer.kana));
             ((TextView) findViewById(R.id.textCustomer)).setText(
-                    customer.name + "\n" +
-                            customer.kana + "\n" +
-                            customer.phone + "\n" +
-                            customer.postalCode + "\n" +
-                            customer.address + "\n\n" +
-                            customer.memo);
+                    "電話番号: " + fallback(customer.phone) + "\n" +
+                            "郵便番号: " + fallback(customer.postalCode) + "\n" +
+                            "住所: " + fallback(customer.address) + "\n\n" +
+                            "メモ\n" + fallback(customer.memo));
         });
         photoRepository.listForCustomer(customerId, photos -> {
             currentPhotos = photos;
             visitDateAdapter.submit(groupPhotosByTakenDate(photos));
+            int count = photos == null ? 0 : photos.size();
+            ((TextView) findViewById(R.id.textVisitSummary)).setText("撮影履歴・写真  " + count + "枚");
         });
     }
 
@@ -129,5 +135,19 @@ public class CustomerDetailActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("キャンセル", null)
                 .show();
+    }
+
+    private String fallback(String value) {
+        String text = safe(value);
+        return text.isEmpty() ? "未登録" : text;
+    }
+
+    private String resolveInitial(String value) {
+        String text = safe(value);
+        return text.isEmpty() ? "？" : text.substring(0, 1);
+    }
+
+    private String safe(String value) {
+        return value == null ? "" : value.trim();
     }
 }

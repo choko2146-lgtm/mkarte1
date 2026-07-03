@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mkarte1.R;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.util.DateUtil;
 import com.example.mkarte1.util.PhotoImageLoader;
 import com.example.mkarte1.util.PhotoFileUtil;
@@ -41,6 +42,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
+        MkarteBottomNav.bind(this, R.id.navPhotos, false);
         repository = new PhotoRepository(this);
         imagePhoto = findViewById(R.id.imagePhoto);
         textPhoto = findViewById(R.id.textPhoto);
@@ -57,10 +59,12 @@ public class PhotoDetailActivity extends AppCompatActivity {
         loadPhotoAndCustomerPhotos(photoId);
 
         imagePhoto.setOnClickListener(v -> openPhotoPreview());
+        findViewById(R.id.buttonBackPhoto).setOnClickListener(v -> finish());
         buttonPreviousPhoto.setOnClickListener(v -> showPreviousPhoto());
         buttonNextPhoto.setOnClickListener(v -> showNextPhoto());
         findViewById(R.id.buttonSaveMemo).setOnClickListener(v -> saveMemo());
         findViewById(R.id.buttonDeletePhoto).setOnClickListener(v -> confirmDelete());
+        findViewById(R.id.buttonPreviewPhoto).setOnClickListener(v -> openPhotoPreview());
     }
 
     private void loadPhotoAndCustomerPhotos(long photoId) {
@@ -97,11 +101,12 @@ public class PhotoDetailActivity extends AppCompatActivity {
     private void showPhoto(Photo value) {
         photo = value;
         bindPhotoImage(imagePhoto, photo.uri);
-        textPhoto.setText(photo.customerName + "\n"
-                + DateUtil.displayYmd(photo.takenDate) + "\n"
-                + photo.fileName);
+        textPhoto.setText("顧客名: " + safe(photo.customerName) + "\n"
+                + "撮影日: " + fallback(DateUtil.displayYmd(photo.takenDate)) + "\n"
+                + "ファイル: " + safe(photo.fileName));
         memo.setText(photo.memo);
         updateArrowVisibility();
+        ((TextView) findViewById(R.id.textPhotoCounter)).setText((currentIndex + 1) + " / " + photoList.size());
     }
 
     private void showPreviousPhoto() {
@@ -187,5 +192,14 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("キャンセル", null)
                 .show();
+    }
+
+    private String fallback(String value) {
+        String text = safe(value);
+        return text.isEmpty() ? "未登録" : text;
+    }
+
+    private String safe(String value) {
+        return value == null ? "" : value.trim();
     }
 }

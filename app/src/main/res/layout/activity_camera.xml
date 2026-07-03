@@ -22,7 +22,7 @@
         android:layout_height="64dp"
         android:background="@drawable/bg_button_primary"
         android:text="撮影する"
-        android:textColor="@color/white"
+        android:textColor="@color/mkarte_text"
         android:textSize="20sp" />
 
     <Button

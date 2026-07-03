@@ -15,11 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.ui.photo.PhotoDetailActivity;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class PhotoListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("写真一覧");
         setContentView(R.layout.activity_photo_list);
+        MkarteBottomNav.bind(this, R.id.navPhotos);
 
         photoRepository = new PhotoRepository(this);
         recyclerPhotos = findViewById(R.id.recyclerPhotos);
@@ -62,7 +64,7 @@ public class PhotoListActivity extends AppCompatActivity {
         spinnerPhotoSort = findViewById(R.id.spinnerPhotoSort);
 
         adapter = new PhotoListAdapter(this::openPhotoDetail);
-        recyclerPhotos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerPhotos.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerPhotos.setAdapter(adapter);
         setupSearch();
         setupSort();

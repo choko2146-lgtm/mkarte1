@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mkarte_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="@dimen/mkarte_screen_padding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:text="その他"
+            android:textColor="@color/mkarte_text"
+            android:textSize="@dimen/text_screen_title"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:background="@drawable/bg_card"
+            android:elevation="1dp"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/space_xs"
+            android:paddingBottom="@dimen/space_xs">
+
+            <include
+                android:id="@+id/rowExportAddressCsv"
+                layout="@layout/item_other_menu_row" />
+
+            <include
+                android:id="@+id/rowBackup"
+                layout="@layout/item_other_menu_row" />
+
+            <include
+                android:id="@+id/rowDataExport"
+                layout="@layout/item_other_menu_row" />
+
+            <include
+                android:id="@+id/rowAppInfo"
+                layout="@layout/item_other_menu_row" />
+
+            <include
+                android:id="@+id/rowSettings"
+                layout="@layout/item_other_menu_row" />
+
+            <include
+                android:id="@+id/rowHelp"
+                layout="@layout/item_other_menu_row" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <include layout="@layout/layout_bottom_nav" />
+</LinearLayout>

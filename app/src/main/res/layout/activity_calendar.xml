@@ -3,55 +3,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mkarte_background"
-    android:orientation="vertical"
-    android:padding="@dimen/mkarte_screen_padding">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="&#12459;&#12524;&#12531;&#12480;&#12540;"
-        android:textColor="@color/mkarte_text"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <CalendarView
-        android:id="@+id/calendarView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_weight="2"
-        android:background="@drawable/bg_card"
-        android:elevation="1dp"
-        android:firstDayOfWeek="1" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/mkarte_screen_padding"
+        android:paddingTop="@dimen/space_sm"
+        android:paddingEnd="@dimen/mkarte_screen_padding"
+        android:paddingBottom="@dimen/space_sm">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="撮影履歴"
-        android:textColor="@color/mkarte_text"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="1">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerVisitHistories"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_sm"
+            android:layout_weight="1.35"
+            android:background="@drawable/bg_card"
+            android:elevation="1dp"
+            android:padding="@dimen/space_xs">
 
-        <TextView
-            android:id="@+id/textNoVisitHistory"
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:firstDayOfWeek="1" />
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="この日の撮影履歴はありません"
-            android:textColor="@color/mkarte_text_subtle"
-            android:textSize="18sp" />
-    </FrameLayout>
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_md"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card"
+            android:elevation="1dp"
+            android:orientation="vertical"
+            android:padding="@dimen/mkarte_card_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="撮影履歴"
+                android:textColor="@color/mkarte_text"
+                android:textSize="@dimen/text_card_title"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/space_sm"
+                android:layout_weight="1">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerVisitHistories"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingBottom="@dimen/space_xs" />
+
+                <TextView
+                    android:id="@+id/textNoVisitHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="この日の撮影履歴はありません"
+                    android:textColor="@color/mkarte_text_subtle"
+                    android:textSize="@dimen/text_body" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include layout="@layout/layout_bottom_nav" />
 </LinearLayout>

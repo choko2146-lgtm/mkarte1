@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mkarte1.R;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.ui.customer.CustomerDetailActivity;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("\u30ab\u30ec\u30f3\u30c0\u30fc");
         setContentView(R.layout.activity_calendar);
+        MkarteBottomNav.bind(this, R.id.navCalendar);
 
         photoRepository = new PhotoRepository(this);
         visitHistoryAdapter = new VisitHistoryAdapter(visitHistory -> {

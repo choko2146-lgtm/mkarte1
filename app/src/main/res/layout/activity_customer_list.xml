@@ -3,46 +3,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mkarte_background"
-    android:orientation="vertical"
-    android:padding="@dimen/mkarte_screen_padding">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="顧客一覧"
-        android:textColor="@color/mkarte_text"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/editSearch"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_input"
-        android:hint="顧客名・フリガナ・電話番号で検索"
-        android:inputType="text"
-        android:paddingStart="14dp"
-        android:paddingEnd="14dp"
-        android:singleLine="true"
-        android:textColor="@color/mkarte_text"
-        android:textColorHint="@color/mkarte_text_subtle"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/buttonExportAddressCsv"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/mkarte_button_height"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_button_secondary"
-        android:text="CSV住所録出力"
-        android:textColor="@color/mkarte_text"
-        android:textSize="15sp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCustomers"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="@dimen/mkarte_screen_padding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:text="顧客一覧"
+            android:textColor="@color/mkarte_text"
+            android:textSize="@dimen/text_screen_title"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editSearch"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/space_md"
+            android:background="@drawable/bg_input"
+            android:drawableStart="@drawable/ic_search_24"
+            android:drawablePadding="8dp"
+            android:hint="顧客名・フリガナ・電話番号で検索"
+            android:inputType="text"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:singleLine="true"
+            android:textColor="@color/mkarte_text"
+            android:textColorHint="@color/mkarte_text_muted"
+            android:textSize="@dimen/text_body" />
+
+        <Spinner
+            android:id="@+id/spinnerCustomerSort"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@drawable/bg_input"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCustomers"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_md"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="10dp" />
+    </LinearLayout>
+
+    <include layout="@layout/layout_bottom_nav" />
 </LinearLayout>

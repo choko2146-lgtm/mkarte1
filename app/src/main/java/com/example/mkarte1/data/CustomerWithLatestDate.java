@@ -7,4 +7,6 @@ public class CustomerWithLatestDate {
     public Customer customer;
 
     public String latestTakenDate;
+
+    public int photoCount;
 }

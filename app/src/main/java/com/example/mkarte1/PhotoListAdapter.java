@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Holder> {
-    private static final int THUMBNAIL_SIZE_DP = 112;
+    private static final int THUMBNAIL_SIZE_DP = 184;
 
     public interface OnClick {
         void onClick(Photo photo);
@@ -121,7 +121,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Hold
             return;
         }
 
-        int size = dpToPx(imageView, THUMBNAIL_SIZE_DP);
+        int size = Math.max(dpToPx(imageView, THUMBNAIL_SIZE_DP), imageView.getWidth());
         Glide.with(imageView)
                 .load(imageModel)
                 .centerCrop()

@@ -40,13 +40,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.Holder> {
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ImageView imageView = new ImageView(parent.getContext());
-        int size = Math.max(120, parent.getResources().getDisplayMetrics().widthPixels / 2 - 32);
-        imageView.setLayoutParams(new RecyclerView.LayoutParams(size, size));
-        imageView.setBackgroundResource(R.drawable.bg_image_soft);
+        int size = Math.max(86, parent.getResources().getDisplayMetrics().widthPixels / 3 - 28);
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(size, size);
+        params.setMargins(0, 0, 8, 8);
+        imageView.setLayoutParams(params);
+        imageView.setBackgroundResource(R.drawable.bg_photo_placeholder);
         imageView.setClickable(true);
         imageView.setFocusable(false);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setPadding(6, 6, 6, 6);
+        imageView.setPadding(0, 0, 0, 0);
         return new Holder(imageView);
     }
 
@@ -76,7 +78,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.Holder> {
     private void bindImage(ImageView imageView, Photo photo) {
         Glide.with(imageView).clear(imageView);
         imageView.setImageDrawable(null);
-        imageView.setBackgroundResource(R.drawable.bg_image_soft);
+        imageView.setBackgroundResource(R.drawable.bg_photo_placeholder);
 
         Object imageModel = resolveImageModel(photo);
         if (imageModel == null) {
@@ -87,9 +89,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.Holder> {
                 .load(imageModel)
                 .centerCrop()
                 .override(resolveTargetWidth(imageView), resolveTargetHeight(imageView))
-                .placeholder(R.drawable.bg_image_soft)
-                .error(R.drawable.bg_image_soft)
-                .fallback(R.drawable.bg_image_soft)
+                .placeholder(R.drawable.bg_photo_placeholder)
+                .error(R.drawable.bg_photo_placeholder)
+                .fallback(R.drawable.bg_photo_placeholder)
                 .dontAnimate()
                 .into(imageView);
     }
