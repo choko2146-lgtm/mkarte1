@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/mkarte_form_icon"
+        android:pathData="M12,2c-3.31,0 -6,2.69 -6,6c0,4.5 6,12 6,12s6,-7.5 6,-12c0,-3.31 -2.69,-6 -6,-6zM12,10.2c-1.21,0 -2.2,-0.99 -2.2,-2.2s0.99,-2.2 2.2,-2.2s2.2,0.99 2.2,2.2s-0.99,2.2 -2.2,2.2z" />
+</vector>

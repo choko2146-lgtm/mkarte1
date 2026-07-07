@@ -3,137 +3,451 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mkarte_background"
+    android:clipToPadding="false"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/mkarte_screen_padding">
+        android:paddingStart="@dimen/mkarte_form_screen_padding"
+        android:paddingTop="@dimen/space_lg"
+        android:paddingEnd="@dimen/mkarte_form_screen_padding"
+        android:paddingBottom="@dimen/space_lg">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="顧客情報"
-            android:textColor="@color/mkarte_text"
-            android:textSize="@dimen/mkarte_title_text"
-            android:textStyle="bold" />
+            android:layout_height="58dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/buttonBackTop"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="戻る"
+                android:padding="8dp"
+                android:src="@drawable/ic_arrow_back_24"
+                android:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/textRegisterTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_md"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:text="新規顧客登録"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_card"
-            android:elevation="2dp"
+            android:layout_marginTop="@dimen/space_lg"
+            android:background="@drawable/bg_customer_form_card"
+            android:elevation="0dp"
             android:orientation="vertical"
-            android:padding="@dimen/mkarte_card_padding">
+            android:paddingStart="@dimen/mkarte_form_card_padding_horizontal"
+            android:paddingTop="@dimen/mkarte_form_card_padding_vertical"
+            android:paddingEnd="@dimen/mkarte_form_card_padding_horizontal"
+            android:paddingBottom="@dimen/mkarte_form_card_padding_vertical">
 
-            <EditText
-                android:id="@+id/editName"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:background="@drawable/bg_input"
-                android:hint="顧客名（必須）"
-                android:inputType="textPersonName"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:textColor="@color/mkarte_text"
-                android:textColorHint="@color/mkarte_text_subtle"
-                android:textSize="@dimen/mkarte_body_text" />
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/mkarte_form_row_min_height"
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editKana"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/mkarte_item_gap"
-                android:background="@drawable/bg_input"
-                android:hint="フリガナ"
-                android:inputType="text"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:textColor="@color/mkarte_text"
-                android:textColorHint="@color/mkarte_text_subtle"
-                android:textSize="@dimen/mkarte_body_text" />
+                <FrameLayout
+                    android:layout_width="@dimen/mkarte_form_icon_column_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
 
-            <EditText
-                android:id="@+id/editPhone"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/mkarte_item_gap"
-                android:background="@drawable/bg_input"
-                android:hint="電話番号"
-                android:inputType="phone"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:textColor="@color/mkarte_text"
-                android:textColorHint="@color/mkarte_text_subtle"
-                android:textSize="@dimen/mkarte_body_text" />
+                    <FrameLayout
+                        android:layout_width="@dimen/mkarte_form_avatar_size"
+                        android:layout_height="@dimen/mkarte_form_avatar_size"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_form_primary_icon">
 
-            <EditText
-                android:id="@+id/editPostalCode"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/mkarte_item_gap"
-                android:background="@drawable/bg_input"
-                android:hint="郵便番号"
-                android:inputType="textPostalAddress"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:textColor="@color/mkarte_text"
-                android:textColorHint="@color/mkarte_text_subtle"
-                android:textSize="@dimen/mkarte_body_text" />
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="顧客名"
+                            android:src="@drawable/ic_form_person_32" />
+                    </FrameLayout>
+                </FrameLayout>
 
-            <EditText
-                android:id="@+id/editAddress"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/mkarte_item_gap"
-                android:background="@drawable/bg_input"
-                android:hint="住所"
-                android:inputType="textPostalAddress"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:textColor="@color/mkarte_text"
-                android:textColorHint="@color/mkarte_text_subtle"
-                android:textSize="@dimen/mkarte_body_text" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/space_lg"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editMemo"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:text="顧客名（必須）"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/mkarte_form_label_text" />
+
+                    <EditText
+                        android:id="@+id/editName"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:background="@android:color/transparent"
+                        android:includeFontPadding="false"
+                        android:inputType="textPersonName"
+                        android:padding="0dp"
+                        android:singleLine="true"
+                        android:textColor="@color/mkarte_text"
+                        android:textSize="@dimen/mkarte_form_value_text" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginEnd="@dimen/space_lg"
+                        android:background="@color/mkarte_form_divider" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="132dp"
-                android:layout_marginTop="@dimen/mkarte_item_gap"
-                android:background="@drawable/bg_input"
-                android:gravity="top"
-                android:hint="メモ"
-                android:inputType="textMultiLine"
-                android:padding="14dp"
-                android:textColor="@color/mkarte_text"
-                android:textColorHint="@color/mkarte_text_subtle"
-                android:textSize="@dimen/mkarte_body_text" />
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/mkarte_form_row_min_height"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="@dimen/mkarte_form_icon_column_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="@dimen/mkarte_form_icon_size"
+                        android:layout_height="@dimen/mkarte_form_icon_size"
+                        android:layout_gravity="center"
+                        android:contentDescription="フリガナ"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="あア"
+                        android:textColor="@color/mkarte_form_icon"
+                        android:textSize="22sp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/space_lg"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:text="フリガナ"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/mkarte_form_label_text" />
+
+                    <EditText
+                        android:id="@+id/editKana"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:background="@android:color/transparent"
+                        android:includeFontPadding="false"
+                        android:inputType="text"
+                        android:padding="0dp"
+                        android:singleLine="true"
+                        android:textColor="@color/mkarte_text"
+                        android:textSize="@dimen/mkarte_form_value_text" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginEnd="@dimen/space_lg"
+                        android:background="@color/mkarte_form_divider" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/mkarte_form_row_min_height"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="@dimen/mkarte_form_icon_column_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/mkarte_form_icon_size"
+                        android:layout_height="@dimen/mkarte_form_icon_size"
+                        android:layout_gravity="center"
+                        android:contentDescription="電話番号"
+                        android:src="@drawable/ic_form_phone_28" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/space_lg"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:text="電話番号"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/mkarte_form_label_text" />
+
+                    <EditText
+                        android:id="@+id/editPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:background="@android:color/transparent"
+                        android:includeFontPadding="false"
+                        android:inputType="phone"
+                        android:padding="0dp"
+                        android:singleLine="true"
+                        android:textColor="@color/mkarte_text"
+                        android:textSize="@dimen/mkarte_form_value_text" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginEnd="@dimen/space_lg"
+                        android:background="@color/mkarte_form_divider" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/mkarte_form_row_min_height"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="@dimen/mkarte_form_icon_column_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_form_icon_circle">
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="21dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="郵便番号"
+                            android:src="@drawable/ic_form_postal_white_24" />
+                    </FrameLayout>
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/space_lg"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:text="郵便番号"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/mkarte_form_label_text" />
+
+                    <EditText
+                        android:id="@+id/editPostalCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:background="@android:color/transparent"
+                        android:includeFontPadding="false"
+                        android:inputType="textPostalAddress"
+                        android:padding="0dp"
+                        android:singleLine="true"
+                        android:textColor="@color/mkarte_text"
+                        android:textSize="@dimen/mkarte_form_value_text" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginEnd="@dimen/space_lg"
+                        android:background="@color/mkarte_form_divider" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/mkarte_form_row_min_height"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="@dimen/mkarte_form_icon_column_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/mkarte_form_icon_size"
+                        android:layout_height="@dimen/mkarte_form_icon_size"
+                        android:layout_gravity="center"
+                        android:contentDescription="住所"
+                        android:src="@drawable/ic_form_location_28" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/space_lg"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:text="住所"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/mkarte_form_label_text" />
+
+                    <EditText
+                        android:id="@+id/editAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:background="@android:color/transparent"
+                        android:includeFontPadding="false"
+                        android:inputType="textPostalAddress"
+                        android:padding="0dp"
+                        android:singleLine="true"
+                        android:textColor="@color/mkarte_text"
+                        android:textSize="@dimen/mkarte_form_value_text" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginEnd="@dimen/space_lg"
+                        android:background="@color/mkarte_form_divider" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/mkarte_form_row_min_height"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="@dimen/mkarte_form_icon_column_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/mkarte_form_icon_size"
+                        android:layout_height="@dimen/mkarte_form_icon_size"
+                        android:layout_gravity="center"
+                        android:contentDescription="メモ"
+                        android:src="@drawable/ic_form_note_28" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/space_lg"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:text="メモ"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/mkarte_form_label_text" />
+
+                    <EditText
+                        android:id="@+id/editMemo"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:background="@android:color/transparent"
+                        android:gravity="top"
+                        android:includeFontPadding="false"
+                        android:inputType="textMultiLine"
+                        android:maxLines="2"
+                        android:padding="0dp"
+                        android:textColor="@color/mkarte_text"
+                        android:textSize="@dimen/mkarte_form_value_text" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <Button
             android:id="@+id/buttonSave"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/mkarte_button_height"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_button_primary"
-            android:drawableStart="@drawable/ic_save_24"
-            android:drawablePadding="8dp"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
+            android:layout_height="@dimen/mkarte_button_height_large"
+            android:layout_marginTop="@dimen/space_lg"
+            android:background="@drawable/bg_button_register"
+            android:backgroundTint="@null"
+            android:contentDescription="保存する"
+            android:drawableStart="@drawable/ic_button_customer_save_48"
+            android:drawablePadding="18dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:stateListAnimator="@null"
             android:text="保存する"
-            android:textColor="@color/mkarte_text"
-            android:textSize="17sp" />
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
 
         <Button
             android:id="@+id/buttonBack"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/mkarte_button_height"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_button_secondary"
-            android:text="戻る"
-            android:textColor="@color/mkarte_text"
-            android:textSize="16sp" />
+            android:layout_height="@dimen/mkarte_button_height_large"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_button_cancel_master"
+            android:backgroundTint="@null"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:stateListAnimator="@null"
+            android:text="キャンセル"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="21sp" />
     </LinearLayout>
 </ScrollView>

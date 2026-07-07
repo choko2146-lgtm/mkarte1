@@ -388,3 +388,139 @@ Pictures/Okannokarte/
 
 - `assembleDebug --console=plain` 成功。
 - commit / push は未実施。
+
+## Step18 Android 15 / Pixel対応 + 写真プレビュー改善 + ボタン画像反映
+
+実装内容:
+
+- Android 15 / Pixel 6a相当のEdge-to-Edge環境で、ステータスバーやナビゲーションバーに画面内容が被らないよう、共通の `EdgeToEdgeUtil` を追加した。
+- ホーム、顧客一覧、顧客詳細、顧客登録/編集、写真一覧、写真詳細、カレンダー、その他、カメラ、撮影後顧客選択の主要画面で、status bar / navigation bar / display cutout / IME Insets をルートレイアウトのpaddingへ反映するようにした。
+- 顧客登録/編集兼用画面に `windowSoftInputMode="adjustResize"` を設定し、`ScrollView` の下端paddingと組み合わせてキーボード表示中も登録/修正ボタンまでスクロールできるようにした。
+- 写真プレビュー画面の左上に戻るボタンを追加し、タップで `finish()` して写真詳細へ戻れるようにした。
+- 写真プレビューの既存ピンチズーム、ドラッグ移動、ダブルタップ拡大/リセット処理は維持した。
+- 添付PNGを参考に、顧客登録時は「登録する」、顧客編集時は「修正する」のボタン表示を調整した。後続の追加修正2で、PNG画像ボタンではなく通常Button + drawable背景へ移行済み。
+- 顧客登録/編集の保存処理、入力チェック、既存画面遷移は変更なし。
+- Room DB構造、Entity構造、DAO、Repository、写真保存処理、MediaStore登録処理、Calendarロジックは変更なし。
+
+確認:
+
+- `assembleDebug --console=plain --no-daemon` 成功。
+- 事前の通常 `assembleDebug --console=plain` は、既存Gradle daemonが存在しない `jlink.exe` を参照して失敗したため、Android Studio JBRを指定し直して `--no-daemon` で再実行した。
+- commit / push は未実施。
+
+## Step18追加修正 写真詳細・写真プレビューUI改善
+
+実装内容:
+
+- 写真詳細画面のメモ保存ボタン文言を「編集」から「メモ追加」へ変更した。
+- 写真詳細画面の「プレビュー」ボタンを「拡大表示」へ変更し、削除ボタンと配置を入れ替えた。
+- 写真詳細画面の削除ボタンは、赤系の意味合いを残しつつ、背景・枠線・文字色を調整して読みやすくした。
+- 写真タップでプレビューへ遷移する動作を廃止し、拡大表示は「拡大表示」ボタンからのみ開くようにした。
+- 写真プレビュー画面の上部に、戻るボタン、顧客名、撮影日、現在枚数 / 総枚数を表示するヘッダーを追加した。
+- 写真プレビュー画面でも `PhotoRepository.listForCustomer()` の既存順を使い、同一顧客の写真を左右スワイプで切り替えられるようにした。
+- 写真プレビューのスワイプ切り替え時は、表示画像、撮影日、枚数表示を更新し、ズーム状態を初期表示へ戻すようにした。
+- 写真プレビューのピンチズーム、ドラッグ移動、ダブルタップ拡大/リセット、戻るボタンは維持した。
+- 顧客詳細、顧客登録/編集、カメラ画面の戻るボタンを、登録/修正ボタンに近い丸みと色味へ軽く調整した。
+- Room DB構造、Entity構造、DAO、Repository仕様、写真保存処理、MediaStore登録処理、Calendarロジックは変更なし。
+
+確認:
+
+- `assembleDebug --console=plain` 成功。
+- commit / push は未実施。
+
+## Step18追加修正2 写真プレビュー被り修正 + ボタンDrawable統一
+
+原因調査:
+
+- 写真プレビューのヘッダー被りは、`activity_photo_preview.xml` のルートが `FrameLayout` で、写真 `ImageView` を全画面表示した上にヘッダーを重ねていたことが原因。
+- 顧客登録/編集画面は `CustomerRegisterActivity` と `activity_customer_register.xml` を共用しており、実際の戻るボタンIDは `buttonBack`、保存ボタンIDは `buttonSave`。
+- 前回の戻るボタンは `buttonBack` に `bg_button_back.xml` を指定済みだったが、登録/修正側が `ImageButton` + `btn_register.png` / `btn_edit.png` のままだったため、同じ設計ルールに見えにくかった。
+
+実装内容:
+
+- 写真プレビュー画面を縦方向レイアウトに変更し、上部ヘッダーと写真表示エリアを分離した。
+- 写真プレビューの戻るボタン、顧客名、撮影日、枚数表示は上部固定の黒背景ヘッダー内に表示し、写真と重ならないようにした。
+- 写真プレビューの `imagePhotoPreview` は維持し、ピンチズーム、ドラッグ移動、ダブルタップ拡大/リセット、左右スワイプ切り替えの既存処理を維持した。
+- 顧客登録/編集画面の `buttonSave` を `ImageButton` から通常 `Button` へ戻し、登録時は `bg_button_register.xml`、編集時は `bg_button_edit.xml` を使うようにした。
+- `btn_register.png` / `btn_edit.png` は直接使用しない方針に合わせ、未使用リソースとして削除した。
+- 登録、修正、戻るボタンの高さ・角丸・余白を揃え、戻るボタンは `bg_button_back.xml` の控えめな枠線ボタンへ調整した。
+- 顧客登録処理、顧客編集処理、入力チェック、写真保存処理、MediaStore登録処理、写真表示処理、写真スワイプ切り替え処理は変更なし。
+- Room DB構造、Entity構造、DAO、Repository仕様、Calendarロジックは変更なし。
+
+確認:
+
+- `assembleDebug --console=plain` 成功。
+- commit / push は未実施。
+
+## Step19A 新規顧客登録/編集画面 詳細モックアップ再現
+
+実装内容:
+
+- 添付の「⑦ 新規顧客登録」詳細モックアップを基準に、顧客登録/編集共用画面を白いカード内のアイコン付き1行フォームへ変更。
+- 画面上部に戻る矢印とタイトルを配置し、登録時は「新規顧客登録」、編集時は「顧客情報」と表示するように調整。
+- 顧客名、フリガナ、電話番号、郵便番号、住所、メモを、左アイコン、項目名、例文hint、下線区切りの構成へ変更。
+- PNGは使わず、person/text/phone/postal/location/note相当のVector Drawableを追加してフォーム左側アイコンとして使用。
+- 保存/登録ボタンは通常Button + `bg_button_register.xml` のPrimary Button、編集時の修正ボタンは通常Button + `bg_button_edit.xml` のSecondary Buttonへ統一。
+- 戻る/キャンセルボタンは通常Button + `bg_button_back.xml` を使用し、保存/修正ボタンと高さ・角丸・余白を揃えた。
+- `ScrollView` 構成と `EdgeToEdgeUtil.apply(this)` は維持し、キーボード表示時のスクロール、ステータスバー/ナビゲーションバー被り対策を継続。
+- メールアドレス欄は現行 `Customer` Entity に項目がなく、DB構造変更禁止のため追加していない。
+- 顧客登録処理、顧客編集処理、入力チェック処理は変更なし。
+- Room DB構造、Entity構造、DAO、Repository仕様、写真保存処理、MediaStore登録処理、Calendarロジックは変更なし。
+
+確認:
+
+- `assembleDebug --console=plain` 成功。
+- commit / push は未実施。
+
+## Step19B 新規顧客登録/編集画面 Master UI最終調整
+
+実装内容:
+
+- 添付の「⑦ 新規顧客登録」詳細モックアップをMaster UIとして、顧客登録/編集共用画面の再現度を再調整。
+- 上部戻るを文字記号から矢印アイコンへ変更し、タイトルの大きさ、余白、カード位置をモックアップ寄りに調整。
+- フォームカードの横余白、内側余白、角丸、線色を調整し、影は外して軽いカード表現へ変更。
+- 顧客名アイコンを小さくし、その他フォームアイコンも小さめの薄いグレージュ系へ統一。
+- フリガナアイコンを三本線から文字入力を示すアイコンへ変更。
+- 郵便番号アイコンを〒単体から封筒系アイコンへ変更。
+- 入力例/hintをすべて削除し、表示要素をアイコン、項目名、入力値、下線に整理。
+- 項目名は `sans-serif-medium`、小さめの文字サイズへ変更し、太すぎない見え方に調整。
+- 下線は右端に余白を持たせ、カードいっぱいまで伸びない長さへ調整。
+- 保存/修正ボタンをMaster UIに寄せ、コーラル背景、同一角丸、左側の白い角丸背景付き顧客追加アイコン、中央揃えテキストの構成へ変更。
+- キャンセルボタンを白背景、細いグレー系枠線、黒文字、保存ボタンと同じ高さ・角丸へ変更。
+- 編集時の「修正する」も同じPrimary Button構成に変更。
+- メールアドレス欄は現行 `Customer` Entity に項目がなく、DB/Entity変更禁止のため追加していない。
+- 顧客登録処理、顧客編集処理、入力チェック処理は変更なし。
+- Room DB構造、Entity構造、DAO、Repository仕様、写真保存処理、MediaStore登録処理、Calendarロジックは変更なし。
+
+確認:
+
+- `assembleDebug --console=plain` 成功。
+- commit / push は未実施。
+
+## Step19C 新規顧客登録/編集画面 Master UI最終仕上げ
+
+実装内容:
+
+- 保存/修正ボタンの見た目を再調整し、コーラル背景、Master UI寄りの角丸、左側の白い角丸背景付き顧客追加アイコン、中央テキストの構成を維持。
+- Android標準Buttonの背景/compound drawable tintで保存アイコンや白背景が上書きされないよう、XMLと `CustomerRegisterActivity` 側でtintを明示的に解除。
+- キャンセルボタンは白背景、細いグレー枠、黒文字、保存ボタンと同じ高さ・角丸へ再調整。
+- フリガナアイコンを、Master UIの「あア」に近い文字アイコン表示へ変更。
+- 郵便番号アイコンを、薄いグレージュの丸背景に白い封筒アイコンを載せる構成へ変更。
+- 顧客名アイコンと各フォームアイコンをさらに小さめにし、主張を抑えた。
+- 項目名と入力値の文字サイズを少し下げ、フォーム行の高さもやや詰めてMaster UIの密度に近づけた。
+- 下線は右端に余白を持たせたまま、カードいっぱいまで伸びない長さを維持。
+- 保存ボタンとキャンセルボタンの間隔を18dpへ調整。
+- 顧客登録処理、顧客編集処理、入力チェック処理は変更なし。
+- Room DB構造、Entity構造、DAO、Repository仕様、写真保存処理、MediaStore登録処理、Calendarロジックは変更なし。
+
+確認:
+
+- `assembleDebug --console=plain` 成功。
+- ADBフルパス `C:\Users\YRhei\AppData\Local\Android\Sdk\platform-tools\adb.exe` で実機 `RF8M50DL2NA` を認識。
+- 最新 `app-debug.apk` を実機へ上書きインストール済み。
+- 実機で `CustomerRegisterActivity` を表示し、スクリーンショット取得済み。
+- 保存ボタンの左アイコンが実機スクリーンショット上で表示されることを確認。
+- キャンセルボタンが白背景・細い枠線で表示されることを確認。
+- Step19C 実機確認OK。
+- 残差異として、保存ボタン左アイコンがMaster UIより少し大きく左寄りに見えるが、軽微な追加調整候補として `docs/next_tasks.md` に記録済み。
+- push は未実施。

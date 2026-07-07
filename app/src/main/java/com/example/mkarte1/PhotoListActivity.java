@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.ui.photo.PhotoDetailActivity;
 
@@ -55,6 +56,7 @@ public class PhotoListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("写真一覧");
         setContentView(R.layout.activity_photo_list);
+        EdgeToEdgeUtil.apply(this);
         MkarteBottomNav.bind(this, R.id.navPhotos);
 
         photoRepository = new PhotoRepository(this);

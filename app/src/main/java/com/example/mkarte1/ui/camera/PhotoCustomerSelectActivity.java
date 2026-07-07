@@ -18,6 +18,7 @@ import com.example.mkarte1.data.Customer;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.CustomerRepository;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.ui.customer.CustomerAdapter;
 import com.example.mkarte1.ui.customer.CustomerRegisterActivity;
 import com.example.mkarte1.util.DateUtil;
@@ -37,6 +38,7 @@ public class PhotoCustomerSelectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_customer_select);
+        EdgeToEdgeUtil.apply(this);
         tempPath = getIntent().getStringExtra("tempPath");
         customerRepository = new CustomerRepository(this);
         photoRepository = new PhotoRepository(this);

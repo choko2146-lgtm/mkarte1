@@ -29,7 +29,16 @@
     <color name="mkarte_avatar_text">#C77766</color>
     <color name="mkarte_border">#EDE2DD</color>
     <color name="mkarte_border_strong">#E8DCD6</color>
+    <color name="mkarte_form_icon">#776C66</color>
+    <color name="mkarte_form_divider">#E6DDD8</color>
+    <color name="mkarte_form_hint">#8F8884</color>
+    <color name="mkarte_button_coral">#E86E5E</color>
+    <color name="mkarte_button_coral_border">#E6DAD5</color>
+    <color name="mkarte_form_icon_circle">#776C66</color>
+    <color name="mkarte_form_card_border">#F2ECE8</color>
     <color name="mkarte_danger">#D85C4A</color>
+    <color name="mkarte_danger_text">#A63A2F</color>
+    <color name="mkarte_danger_border">#E7A59B</color>
     <color name="mkarte_danger_soft">#FCE7E4</color>
     <color name="mkarte_shadow_hint">#22000000</color>
 </resources>

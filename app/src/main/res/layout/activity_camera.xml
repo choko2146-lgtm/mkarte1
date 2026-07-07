@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/mkarte_button_height"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_button_secondary"
+        android:background="@drawable/bg_button_back"
         android:text="戻る"
         android:textColor="@color/mkarte_text" />
 </LinearLayout>

@@ -1,9 +1,11 @@
 package com.example.mkarte1.ui.customer;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import com.example.mkarte1.data.Customer;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.CustomerRepository;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.util.DateUtil;
 import com.example.mkarte1.util.MediaStoreHelper;
 import com.example.mkarte1.util.PhotoFileUtil;
@@ -36,6 +39,7 @@ public class CustomerRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_register);
+        EdgeToEdgeUtil.apply(this);
         customerRepository = new CustomerRepository(this);
         photoRepository = new PhotoRepository(this);
         tempPath = getIntent().getStringExtra("tempPath");
@@ -48,12 +52,50 @@ public class CustomerRegisterActivity extends AppCompatActivity {
         address = findViewById(R.id.editAddress);
         memo = findViewById(R.id.editMemo);
 
-        findViewById(R.id.buttonSave).setOnClickListener(v -> save());
-        findViewById(R.id.buttonBack).setOnClickListener(v -> finish());
+        TextView title = findViewById(R.id.textRegisterTitle);
+        Button saveButton = findViewById(R.id.buttonSave);
+        Button backButton = findViewById(R.id.buttonBack);
+        saveButton.setOnClickListener(v -> save());
+        findViewById(R.id.buttonBackTop).setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> finish());
+        configurePrimaryActionButton(saveButton);
+        clearButtonTint(backButton);
 
         if (isEditMode()) {
-            ((Button) findViewById(R.id.buttonSave)).setText("更新する");
+            title.setText("顧客情報");
+            saveButton.setText("修正する");
+            configurePrimaryActionButton(saveButton);
+            saveButton.setContentDescription("修正する");
             loadCustomerForEdit();
+        } else {
+            title.setText("新規顧客登録");
+            saveButton.setText("保存する");
+            configurePrimaryActionButton(saveButton);
+            saveButton.setContentDescription("保存する");
+        }
+    }
+
+    private void configurePrimaryActionButton(Button button) {
+        button.setBackgroundResource(R.drawable.bg_button_register);
+        clearButtonTint(button);
+        button.setTextColor(getColor(R.color.white));
+        button.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                R.drawable.ic_button_customer_save_48,
+                0,
+                0,
+                0
+        );
+        button.setCompoundDrawablePadding(
+                getResources().getDimensionPixelSize(R.dimen.mkarte_form_button_icon_gap)
+        );
+    }
+
+    private void clearButtonTint(Button button) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            button.setBackgroundTintList(null);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            button.setCompoundDrawableTintList(null);
         }
     }
 

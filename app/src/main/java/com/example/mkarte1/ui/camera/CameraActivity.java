@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.example.mkarte1.R;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.util.PhotoFileUtil;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        EdgeToEdgeUtil.apply(this);
         findViewById(R.id.buttonTakePhoto).setOnClickListener(v -> requestCamera());
         findViewById(R.id.buttonBack).setOnClickListener(v -> finish());
     }

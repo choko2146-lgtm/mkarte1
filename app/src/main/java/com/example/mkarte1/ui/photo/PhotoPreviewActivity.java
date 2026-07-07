@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,22 +20,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mkarte1.R;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.util.DateUtil;
 import com.example.mkarte1.util.PhotoImageLoader;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoPreviewActivity extends AppCompatActivity {
     public static final String EXTRA_PHOTO_ID = PhotoDetailActivity.EXTRA_PHOTO_ID;
     private static final float MIN_SCALE = 1f;
     private static final float DOUBLE_TAP_SCALE = 2.5f;
     private static final float MAX_SCALE = 5f;
+    private static final float SWIPE_DISTANCE_DP = 72f;
+    private static final float SWIPE_VELOCITY_DP = 240f;
 
     private ImageView imagePhoto;
+    private TextView textCustomerName;
+    private TextView textPreviewMeta;
     private PhotoRepository repository;
+    private final List<Photo> photoList = new ArrayList<>();
     private final Matrix photoMatrix = new Matrix();
     private final RectF photoRect = new RectF();
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
+    private int currentIndex = -1;
     private float currentScale = MIN_SCALE;
     private float lastTouchX;
     private float lastTouchY;
@@ -51,7 +61,10 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         }
 
         imagePhoto = findViewById(R.id.imagePhotoPreview);
+        textCustomerName = findViewById(R.id.textPreviewCustomerName);
+        textPreviewMeta = findViewById(R.id.textPreviewMeta);
         imagePhoto.setScaleType(ImageView.ScaleType.MATRIX);
+        findViewById(R.id.buttonPreviewBack).setOnClickListener(v -> finish());
         setupGestures();
         enterImmersiveMode();
 
@@ -62,7 +75,7 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             finish();
             return;
         }
-        repository.get(photoId, this::showPhoto);
+        loadPhotoAndCustomerPhotos(photoId);
     }
 
     @Override
@@ -95,6 +108,11 @@ public class PhotoPreviewActivity extends AppCompatActivity {
 
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+
+            @Override
             public boolean onDoubleTap(MotionEvent e) {
                 if (currentScale > MIN_SCALE + 0.05f) {
                     resetPhotoMatrix();
@@ -102,6 +120,11 @@ public class PhotoPreviewActivity extends AppCompatActivity {
                     zoomTo(DOUBLE_TAP_SCALE, e.getX(), e.getY());
                 }
                 return true;
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return handleSwipe(e1, e2, velocityX, velocityY);
             }
         });
 
@@ -115,18 +138,102 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         findViewById(R.id.rootPhotoPreview).setOnTouchListener(listener);
     }
 
+    private void loadPhotoAndCustomerPhotos(long photoId) {
+        repository.get(photoId, value -> {
+            if (value == null) {
+                Toast.makeText(this, "写真が見つかりません", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+            repository.listForCustomer(value.customerId, photos -> {
+                photoList.clear();
+                if (photos != null) {
+                    photoList.addAll(photos);
+                }
+                currentIndex = findPhotoIndex(photoId);
+                if (currentIndex == -1) {
+                    photoList.add(value);
+                    currentIndex = photoList.size() - 1;
+                }
+                showPhoto(photoList.get(currentIndex));
+            });
+        });
+    }
+
+    private int findPhotoIndex(long photoId) {
+        for (int i = 0; i < photoList.size(); i++) {
+            if (photoList.get(i).id == photoId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private void showPhoto(Photo photo) {
         if (photo == null) {
             Toast.makeText(this, "写真が見つかりません", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
+        dragging = false;
+        updateHeader(photo);
         bindPhotoImage(photo.uri);
+    }
+
+    private void updateHeader(Photo photo) {
+        textCustomerName.setText(fallback(photo.customerName, "名前未設定"));
+        String displayDate = DateUtil.displayYmd(photo.takenDate);
+        int total = Math.max(1, photoList.size());
+        int position = currentIndex >= 0 ? currentIndex + 1 : 1;
+        textPreviewMeta.setText(fallback(displayDate, "撮影日未登録") + "  " + position + " / " + total);
+    }
+
+    private boolean handleSwipe(MotionEvent start, MotionEvent end, float velocityX, float velocityY) {
+        if (start == null || end == null || currentScale > MIN_SCALE + 0.05f || photoList.size() <= 1) {
+            return false;
+        }
+
+        float dx = end.getX() - start.getX();
+        float dy = end.getY() - start.getY();
+        float density = getResources().getDisplayMetrics().density;
+        float minDistance = SWIPE_DISTANCE_DP * density;
+        float minVelocity = SWIPE_VELOCITY_DP * density;
+
+        if (Math.abs(dx) < minDistance
+                || Math.abs(velocityX) < minVelocity
+                || Math.abs(dx) < Math.abs(dy) * 1.4f) {
+            return false;
+        }
+
+        if (dx > 0) {
+            return showPreviousPhoto();
+        }
+        return showNextPhoto();
+    }
+
+    private boolean showPreviousPhoto() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            showPhoto(photoList.get(currentIndex));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean showNextPhoto() {
+        if (currentIndex < photoList.size() - 1) {
+            currentIndex++;
+            showPhoto(photoList.get(currentIndex));
+            return true;
+        }
+        return false;
     }
 
     private void bindPhotoImage(String uriText) {
         if (uriText == null || uriText.trim().isEmpty()) {
             imagePhoto.setImageDrawable(null);
+            photoMatrix.reset();
+            currentScale = MIN_SCALE;
             return;
         }
 
@@ -265,5 +372,10 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             return viewSize - end;
         }
         return 0f;
+    }
+
+    private String fallback(String value, String fallback) {
+        String text = value == null ? "" : value.trim();
+        return text.isEmpty() ? fallback : text;
     }
 }

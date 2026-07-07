@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/mkarte_surface" />
     <stroke
-        android:width="1.5dp"
+        android:width="1dp"
         android:color="@color/mkarte_button_coral_border" />
-    <corners android:radius="@dimen/radius_pill" />
+    <corners android:radius="@dimen/radius_form_button" />
 </shape>

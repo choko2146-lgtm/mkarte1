@@ -14,15 +14,20 @@
 
         <TextView
             android:id="@+id/buttonBackCustomerDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
             android:layout_marginTop="@dimen/space_sm"
+            android:background="@drawable/bg_button_back"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:minWidth="128dp"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
             android:text="←  顧客詳細"
             android:textColor="@color/mkarte_text"
-            android:textSize="@dimen/text_screen_title"
+            android:textSize="@dimen/text_body"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -120,7 +125,7 @@
                 android:layout_marginTop="@dimen/space_md"
                 android:background="@drawable/bg_button_danger"
                 android:text="顧客を削除"
-                android:textColor="@color/mkarte_danger"
+                android:textColor="@color/mkarte_danger_text"
                 android:textSize="@dimen/text_body" />
         </LinearLayout>
 

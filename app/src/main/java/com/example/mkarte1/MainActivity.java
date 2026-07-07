@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mkarte1.data.Customer;
 import com.example.mkarte1.data.CustomerWithLatestDate;
 import com.example.mkarte1.repository.CustomerRepository;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.ui.camera.CameraActivity;
 import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.ui.customer.CustomerDetailActivity;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EdgeToEdgeUtil.apply(this);
         MkarteBottomNav.bind(this, R.id.navHome);
         customerRepository = new CustomerRepository(this);
 

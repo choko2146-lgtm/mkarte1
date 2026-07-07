@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mkarte1.R;
 import com.example.mkarte1.repository.CustomerRepository;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.util.CsvShareUtil;
 import com.example.mkarte1.util.CustomerAddressCsvUtil;
@@ -27,6 +28,7 @@ public class OtherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
+        EdgeToEdgeUtil.apply(this);
         MkarteBottomNav.bind(this, R.id.navMore);
         repository = new CustomerRepository(this);
 

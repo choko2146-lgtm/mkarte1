@@ -15,6 +15,7 @@ import com.example.mkarte1.data.Customer;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.CustomerRepository;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.ui.photo.PhotoDetailActivity;
 import com.example.mkarte1.util.PhotoFileUtil;
@@ -36,6 +37,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_detail);
+        EdgeToEdgeUtil.apply(this);
         MkarteBottomNav.bind(this, R.id.navCustomers, false);
         customerId = getIntent().getLongExtra("customerId", -1);
         customerRepository = new CustomerRepository(this);

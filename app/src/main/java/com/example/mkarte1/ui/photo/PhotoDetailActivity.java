@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mkarte1.R;
 import com.example.mkarte1.data.Photo;
 import com.example.mkarte1.repository.PhotoRepository;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.util.DateUtil;
 import com.example.mkarte1.util.PhotoImageLoader;
@@ -42,6 +43,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
+        EdgeToEdgeUtil.apply(this);
         MkarteBottomNav.bind(this, R.id.navPhotos, false);
         repository = new PhotoRepository(this);
         imagePhoto = findViewById(R.id.imagePhoto);
@@ -58,7 +60,6 @@ public class PhotoDetailActivity extends AppCompatActivity {
         }
         loadPhotoAndCustomerPhotos(photoId);
 
-        imagePhoto.setOnClickListener(v -> openPhotoPreview());
         findViewById(R.id.buttonBackPhoto).setOnClickListener(v -> finish());
         buttonPreviousPhoto.setOnClickListener(v -> showPreviousPhoto());
         buttonNextPhoto.setOnClickListener(v -> showNextPhoto());

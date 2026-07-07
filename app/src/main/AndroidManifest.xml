@@ -45,7 +45,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.customer.CustomerRegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.camera.PhotoCustomerSelectActivity"
             android:exported="false" />

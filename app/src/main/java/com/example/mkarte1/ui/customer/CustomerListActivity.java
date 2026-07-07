@@ -19,6 +19,7 @@ import com.example.mkarte1.R;
 import com.example.mkarte1.data.Customer;
 import com.example.mkarte1.data.CustomerWithLatestDate;
 import com.example.mkarte1.repository.CustomerRepository;
+import com.example.mkarte1.ui.EdgeToEdgeUtil;
 import com.example.mkarte1.ui.MkarteBottomNav;
 import com.example.mkarte1.util.CsvShareUtil;
 import com.example.mkarte1.util.CustomerAddressCsvUtil;
@@ -47,6 +48,7 @@ public class CustomerListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_list);
+        EdgeToEdgeUtil.apply(this);
         MkarteBottomNav.bind(this, R.id.navCustomers);
         repository = new CustomerRepository(this);
         adapter = new CustomerAdapter(customer -> {
