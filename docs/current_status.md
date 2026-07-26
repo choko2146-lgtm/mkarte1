@@ -1,5 +1,88 @@
 # Current Status
 
+## Step22 Googleフォト・端末ギャラリーへの写真表示改善
+
+Status:
+
+- Implemented on 2026-07-27.
+- Status: completed, build verified, user real-device confirmation OK.
+- Scope was limited to `MediaStoreHelper` and docs.
+- Room DB structure, Entity, DAO, Repository, existing photo paths, customer-photo links, folder names, file naming rules, UI, Manifest, Gradle, and external libraries were not changed.
+- Pixel 6a real-device confirmation remains on hold and is not included in this Step completion.
+
+Existing Photo Storage Checked:
+
+- `CameraActivity` creates a temporary JPEG file with `PhotoFileUtil.createTempPhotoFile()`.
+- Temporary and final app-owned files are stored under `getExternalFilesDir(Environment.DIRECTORY_PICTURES)`.
+- The app-owned root folder is `Pictures/おかんのカルテ/` inside the app-specific external files area.
+- After selecting an existing customer, `PhotoCustomerSelectActivity.link()` calls `PhotoFileUtil.moveTempToCustomer()`.
+- After creating a new customer from a captured photo, `CustomerRegisterActivity.linkTempPhoto()` calls `PhotoFileUtil.moveTempToCustomer()`.
+- Final app-owned files are saved under `Pictures/おかんのカルテ/<顧客名>/`.
+- Final app-owned filenames keep the existing rule: `yyyyMMdd_<顧客名>.jpg`, with `_01`, `_02`, etc. only when needed for uniqueness.
+- The DB keeps the app-owned file URI as `Photo.uri = Uri.fromFile(finalFile).toString()`.
+- The DB also keeps `Photo.fileName`, `Photo.takenDate`, `Photo.customerId`, and `Photo.customerName`.
+- The MediaStore URI returned by `MediaStoreHelper.copyToGallery()` is not saved to DB and is not used by in-app photo display.
+
+Existing MediaStore Registration Checked:
+
+- `MediaStoreHelper.copyToGallery()` is the shared MediaStore registration point.
+- Android 10 and later use `ContentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)` and copy JPEG bytes with `resolver.openOutputStream(galleryUri)`.
+- The gallery copy destination is `RELATIVE_PATH = Pictures/Okannokarte`.
+- Existing `DISPLAY_NAME` uses the saved filename and already includes `.jpg`.
+- Existing `MIME_TYPE` is `image/jpeg`.
+- Existing `IS_PENDING` was set to `1` before writing and updated to `0` after writing.
+- Android 9 and earlier keep the existing fallback: `MediaScannerConnection.scanFile()` for the app-owned file.
+- `MediaScannerConnection` is not used on Android 10 and later when the MediaStore copy succeeds.
+
+Cause Investigation:
+
+- Galaxy Gallery can display new photos because Android 10 and later already receive a public MediaStore copy under `Pictures/Okannokarte/`, with a JPEG MIME type and `IS_PENDING` cleared after write completion.
+- User real-device confirmation showed Google Photos recognizes the local device folder under `コレクション → このデバイス上 → Okannokarte`.
+- Google Photos main timeline and cloud-side display depend on Google Photos' own folder backup setting for `Okannokarte`.
+- Android official reference describes `DATE_ADDED`, `DATE_MODIFIED`, and `DATE_TAKEN` as read-only MediaStore columns, so app-side `ContentValues` writes for these columns are not kept.
+- No evidence was found that the current code writes an incorrect MIME type, removes the `.jpg` extension, uses a non-image `RELATIVE_PATH`, leaves `IS_PENDING = 1`, or stores the MediaStore URI in DB.
+
+Fix:
+
+- Added a guard so 0-byte source files are not registered or scanned as gallery photos.
+- Removed the temporary `DATE_ADDED`, `DATE_MODIFIED`, and `DATE_TAKEN` `ContentValues` writes after confirming they are read-only in the Android official reference.
+- Kept `DISPLAY_NAME`, `MIME_TYPE`, `RELATIVE_PATH`, `IS_PENDING` behavior, destination folder, file naming, and app-owned storage unchanged.
+- MediaStore registration failure still returns `null`, logs a warning, deletes only the incomplete MediaStore row when one was created, and does not delete the app-owned saved photo.
+- Existing photos are not re-registered; the fix applies to newly captured/saved photos after this Step.
+
+Verification:
+
+- `$env:JAVA_HOME='C:\Program Files\Android\Android Studio\jbr'; .\gradlew.bat assembleDebug --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- No compile errors were reported.
+- The build was run again after removing the read-only date column writes.
+- No tests were added or run because this change is limited to Android framework MediaStore registration and no directly related local test existed.
+
+User Real-device Confirmation:
+
+- A newly captured photo displayed normally inside the app.
+- The photo displayed normally in the Galaxy Gallery `Okannokarte` folder.
+- The photo was not found in the main Google Photos photo list.
+- The photo displayed normally in Google Photos under `コレクション → このデバイス上 → Okannokarte`.
+- No duplicate photo display occurred.
+- No 0-byte image occurred.
+- No thumbnail loss occurred.
+- No crash occurred.
+
+Final Judgment:
+
+- MediaStore registration is working normally.
+- Google Photos local device-photo recognition is working normally.
+- Google Photos main list and cloud backup behavior depend on the Google Photos folder backup setting for `Okannokarte`.
+- No additional app-side implementation is needed for Google Photos backup or main-list display.
+- The Step22 fix applies to newly captured/saved photos after this Step. Existing photos are not re-registered.
+
+Remaining:
+
+- Step22 user real-device confirmation is OK.
+- Pixel 6a confirmation remains deferred for a later pass.
+- `docs/error_notes.md` was not updated because no new crash, build failure, or important investigation failure occurred.
+- push was not performed.
+
 ## Step21 郵便番号から住所自動入力機能
 
 Status:

@@ -24,7 +24,7 @@ public final class MediaStoreHelper {
     }
 
     public static Uri copyToGallery(Context context, File sourceFile, String displayName) {
-        if (context == null || sourceFile == null || !sourceFile.exists()) {
+        if (context == null || sourceFile == null || !sourceFile.exists() || sourceFile.length() <= 0) {
             return null;
         }
 
@@ -81,7 +81,7 @@ public final class MediaStoreHelper {
     }
 
     public static void scanPhoto(Context context, File file) {
-        if (context == null || file == null || !file.exists()) {
+        if (context == null || file == null || !file.exists() || file.length() <= 0) {
             return;
         }
         Uri galleryUri = copyToGallery(context, file, file.getName());
@@ -91,6 +91,9 @@ public final class MediaStoreHelper {
     }
 
     private static void scanExistingFile(Context context, File file) {
+        if (context == null || file == null || !file.exists() || file.length() <= 0) {
+            return;
+        }
         MediaScannerConnection.scanFile(
                 context.getApplicationContext(),
                 new String[]{file.getAbsolutePath()},

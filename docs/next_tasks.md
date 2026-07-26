@@ -1,5 +1,49 @@
 # Next Tasks
 
+## Step22 Googleフォト・端末ギャラリーへの写真表示改善
+
+Status:
+
+- 完了 / ユーザー実機確認OK。
+- `assembleDebug --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- Galaxyギャラリー確認OK。
+- Googleフォトの端末内フォルダ確認OK。
+- Pixel 6a確認は後日確認項目として継続。
+
+Implemented:
+
+- 写真保存方式とMediaStore登録方式を調査済み。
+- 既存の本体保存先はアプリ専用外部領域 `Pictures/おかんのカルテ/<顧客名>/` のまま維持。
+- DBに保存するURIは既存どおり app-owned file の `file://` URIを維持。
+- Android 10以降のMediaStoreコピー先は既存どおり `Pictures/Okannokarte/` を維持。
+- `DISPLAY_NAME`、`MIME_TYPE = image/jpeg`、`RELATIVE_PATH`、`IS_PENDING`解除の既存処理は維持。
+- 0バイトのソースファイルはMediaStore登録またはメディアスキャンしないガードを追加。
+- `DATE_ADDED`、`DATE_MODIFIED`、`DATE_TAKEN` はAndroid公式仕様上読み取り専用のため、`ContentValues`への設定は残していない。
+- 既存写真の一括MediaStore再登録、DB更新、保存先変更、命名規則変更は実施なし。
+
+Real-device Confirmation:
+
+- アプリ内で新規撮影写真が正常に表示された。
+- Galaxyギャラリーの `Okannokarte` フォルダに正常表示された。
+- Googleフォトのメイン写真一覧では確認できなかった。
+- Googleフォトの `コレクション → このデバイス上 → Okannokarte` では正常に表示された。
+- 写真の重複表示なし。
+- 0バイト画像なし。
+- サムネイル欠損なし。
+- クラッシュなし。
+- MediaStoreへの写真登録とGoogleフォトによる端末内写真認識は正常と判断。
+- Googleフォトのメイン一覧やクラウドバックアップはGoogleフォト側の `Okannokarte` フォルダのバックアップ設定に依存するため、アプリ側の追加実装は行わない。
+- 既存写真は今回の修正対象外であり、表示状態が変わらない可能性があること。
+
+Remaining:
+
+- Pixel 6aは後日、必要なタイミングで確認する。
+
+Notes:
+
+- `docs/error_notes.md` は更新なし。Step22作業中に新しいクラッシュ、ビルド失敗、重大な調査失敗は発生していない。
+- push は未実施。
+
 ## Step21 郵便番号から住所自動入力機能
 
 Status:
