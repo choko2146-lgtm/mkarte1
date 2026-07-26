@@ -1,5 +1,66 @@
 # Current Status
 
+## Step21 郵便番号から住所自動入力機能
+
+Status:
+
+- Implemented on 2026-07-27.
+- Status: completed, build verified, Galaxy real-device confirmation OK, user real-device confirmation OK.
+- Scope was limited to `CustomerRegisterActivity`, ZipCloud API communication, and AndroidManifest internet permission.
+- Customer registration and customer editing both use the same implementation through the existing shared screen.
+
+Implemented:
+
+- Added ZipCloud postal-code address lookup using `https://zipcloud.ibsnet.co.jp/api/search`.
+- Added postal-code input monitoring to `CustomerRegisterActivity`.
+- Address lookup starts only after the user edits the postal-code field and the normalized value becomes 7 digits.
+- Initial customer data binding in edit mode does not trigger address lookup, so saved addresses are not overwritten when opening the edit screen.
+- Postal-code normalization supports surrounding-space trim, half-width hyphen removal, full-width hyphen removal, and full-width digit conversion to half-width digits.
+- Duplicate requests for the same normalized postal code are suppressed, including requests already in flight.
+- If the postal code changes while a request is running, the older result is ignored and is not applied to the address field.
+- One returned address is applied directly to the existing address input field.
+- Multiple returned addresses are shown with the Android standard `AlertDialog` title `住所を選択`; cancel leaves the address unchanged.
+- Not-found responses show `該当する住所が見つかりませんでした`.
+- Communication, timeout, JSON, and API status errors show `住所を取得できませんでした。通信状況を確認してください`, while details are logged to Logcat.
+- Activity destruction dismisses any address-selection dialog and shuts down the address lookup executor; finished activities do not update UI from returned lookup results.
+- API failure does not clear manually entered addresses, so registration and editing can continue by hand input.
+- `AndroidManifest.xml` now has `android.permission.INTERNET`.
+
+Galaxy Real-device Confirmation:
+
+- New customer registration: postal-code address auto-fill works.
+- Existing customer editing: postal-code address auto-fill works.
+- Hyphenless postal codes work.
+- Hyphenated postal codes work.
+- Full-width digit postal codes work after normalization.
+- After address auto-fill, house number and building name can still be added manually.
+- Opening the edit screen does not overwrite an existing saved address.
+- When no matching address exists, the existing address field is not cleared.
+- When communication fails, the address can still be entered manually and saved.
+- No crash occurred.
+- Existing customer registration, editing, and save flows were not affected.
+
+Address Auto-fill UX Decision:
+
+- Step21 keeps the current behavior: address lookup runs automatically when postal-code input reaches 7 normalized digits.
+- This was chosen because automatic lookup is a common implementation style, reduces operation count, and keeps the Master UI unchanged.
+- Adding a success Toast such as `郵便番号から住所を入力しました`, adding an `住所検索` button, or re-evaluating automatic versus manual lookup remains only a future UI/operation review item, not a confirmed task.
+
+Not Changed:
+
+- `activity_customer_register.xml` layout and Master UI design were not changed.
+- `Customer` Entity fields were not changed.
+- Room DB version, schema, DAO, Repository save/update behavior, and migrations were not changed.
+- No Retrofit, Volley, OkHttp, or other new external communication library was added.
+- No automatic large-volume live ZipCloud API test was run.
+
+Verification:
+
+- `$env:JAVA_HOME='C:\Program Files\Android\Android Studio\jbr'; .\gradlew.bat assembleDebug --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- No compile errors were reported.
+- Galaxy real-device confirmation is OK.
+- Step21 is complete.
+
 ## Step20 Final Completion
 
 Status:

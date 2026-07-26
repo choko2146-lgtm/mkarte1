@@ -1,5 +1,42 @@
 # Next Tasks
 
+## Step21 郵便番号から住所自動入力機能
+
+Status:
+
+- 完了 / Galaxy実機確認OK / ユーザー実機確認OK
+- 顧客登録・顧客編集共通の `CustomerRegisterActivity` で対応済み。
+- 既存の次候補タスクは勝手に確定せず、この下の既存記載を維持する。
+
+Implemented:
+
+- ZipCloud郵便番号検索APIを使用した住所自動入力。
+- 郵便番号7桁入力後の自動検索。
+- ハイフンあり・なし対応。
+- 全角数字の正規化。
+- 複数住所時のAndroid標準 `AlertDialog` 選択。
+- 通信失敗・該当なし時も住所欄を消さず、手入力を継続可能。
+- DB構造、Roomバージョン、`Customer` Entity、登録/編集保存処理、Master UIレイアウトは変更なし。
+
+Build:
+
+- `assembleDebug --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+
+Real-device Confirmation:
+
+- 新規顧客登録で郵便番号から住所が自動入力されることを確認済み。
+- 既存顧客編集でも住所自動入力が利用できることを確認済み。
+- ハイフンなし、ハイフンあり、全角数字の郵便番号を確認済み。
+- 住所自動入力後に番地・建物名を追加入力できることを確認済み。
+- 編集画面を開いただけでは既存住所が上書きされないことを確認済み。
+- 該当住所なし、通信失敗時も住所欄を消さず、手入力保存できることを確認済み。
+- クラッシュなし、既存の顧客登録・編集・保存機能への影響なし。
+
+Future UI / Operation Review:
+
+- Step21では郵便番号7桁入力後の自動住所入力方式を維持する。
+- 成功時Toastの追加、郵便番号欄付近への `住所検索` ボタン追加、自動検索と手動検索の再評価は、確定タスクではなく将来のUI・操作性検討事項として残す。
+
 ## Step20 Calendar Migration / Rokuyo / Holiday / Visit Dot
 
 Status:
