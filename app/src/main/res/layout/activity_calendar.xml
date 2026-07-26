@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mkarte_background"
@@ -15,34 +16,150 @@
         android:paddingEnd="@dimen/mkarte_screen_padding"
         android:paddingBottom="@dimen/space_sm">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/space_sm"
-            android:layout_weight="1.35"
+            android:layout_weight="1.55"
             android:background="@drawable/bg_card"
             android:elevation="1dp"
-            android:padding="@dimen/space_xs">
+            android:orientation="vertical"
+            android:padding="@dimen/space_sm">
 
-            <CalendarView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/calendar_month_button_size"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/buttonPreviousMonth"
+                    android:layout_width="@dimen/calendar_month_button_size"
+                    android:layout_height="@dimen/calendar_month_button_size"
+                    android:background="@drawable/bg_calendar_month_button"
+                    android:contentDescription="前月"
+                    android:padding="12dp"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_chevron_left_24" />
+
+                <TextView
+                    android:id="@+id/textCalendarMonth"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/mkarte_text"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/buttonNextMonth"
+                    android:layout_width="@dimen/calendar_month_button_size"
+                    android:layout_height="@dimen/calendar_month_button_size"
+                    android:background="@drawable/bg_calendar_month_button"
+                    android:contentDescription="翌月"
+                    android:padding="12dp"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_chevron_right_24" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutWeekdays"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="7">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="日"
+                    android:textColor="@color/mkarte_calendar_sunday"
+                    android:textSize="@dimen/calendar_weekday_text" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="月"
+                    android:textColor="@color/mkarte_text"
+                    android:textSize="@dimen/calendar_weekday_text" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="火"
+                    android:textColor="@color/mkarte_text"
+                    android:textSize="@dimen/calendar_weekday_text" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="水"
+                    android:textColor="@color/mkarte_text"
+                    android:textSize="@dimen/calendar_weekday_text" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="木"
+                    android:textColor="@color/mkarte_text"
+                    android:textSize="@dimen/calendar_weekday_text" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="金"
+                    android:textColor="@color/mkarte_text"
+                    android:textSize="@dimen/calendar_weekday_text" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="土"
+                    android:textColor="@color/mkarte_calendar_saturday"
+                    android:textSize="@dimen/calendar_weekday_text" />
+            </LinearLayout>
+
+            <com.kizitonwose.calendar.view.CalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:firstDayOfWeek="1" />
-        </FrameLayout>
+                android:clipToPadding="false"
+                app:cv_daySize="rectangle"
+                app:cv_dayViewResource="@layout/item_calendar_day"
+                app:cv_outDateStyle="endOfRow"
+                app:cv_scrollPaged="true" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/space_md"
-            android:layout_weight="1"
+            android:layout_weight="0.85"
             android:background="@drawable/bg_card"
             android:elevation="1dp"
             android:orientation="vertical"
             android:padding="@dimen/mkarte_card_padding">
 
             <TextView
+                android:id="@+id/textVisitHistoryTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="撮影履歴"

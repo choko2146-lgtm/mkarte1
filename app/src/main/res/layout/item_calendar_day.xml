@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/calendar_day_vertical_padding"
+    android:paddingBottom="@dimen/calendar_day_vertical_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textCalendarDayNumber"
+            android:layout_width="@dimen/calendar_day_circle_size"
+            android:layout_height="@dimen/calendar_day_circle_size"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="@color/mkarte_text"
+            android:textSize="@dimen/calendar_day_text"
+            tools:text="23" />
+
+        <TextView
+            android:id="@+id/textCalendarRokuyo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/calendar_rokuyo_line_height"
+            android:layout_marginTop="@dimen/calendar_rokuyo_margin_top"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/mkarte_text_subtle"
+            android:textSize="@dimen/calendar_rokuyo_text"
+            android:visibility="invisible"
+            tools:text="大安"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/viewCalendarVisitDot"
+            android:layout_width="@dimen/calendar_visit_dot_size"
+            android:layout_height="@dimen/calendar_visit_dot_size"
+            android:layout_marginTop="@dimen/calendar_visit_dot_margin_top"
+            android:background="@drawable/bg_calendar_visit_dot"
+            android:visibility="invisible" />
+    </LinearLayout>
+</FrameLayout>

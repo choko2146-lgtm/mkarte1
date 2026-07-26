@@ -41,4 +41,9 @@
     <color name="mkarte_danger_border">#E7A59B</color>
     <color name="mkarte_danger_soft">#FCE7E4</color>
     <color name="mkarte_shadow_hint">#22000000</color>
+    <color name="mkarte_calendar_sunday">#FF3B30</color>
+    <color name="mkarte_calendar_saturday">#007AFF</color>
+    <color name="mkarte_calendar_selected_bg">#FFE9E6</color>
+    <color name="mkarte_calendar_today_bg">#E6F2FF</color>
+    <color name="mkarte_calendar_visit_dot">#1C1C1E</color>
 </resources>

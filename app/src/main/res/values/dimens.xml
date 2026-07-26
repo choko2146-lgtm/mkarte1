@@ -19,6 +19,17 @@
     <dimen name="icon_bottom_nav">24dp</dimen>
     <dimen name="icon_card">32dp</dimen>
     <dimen name="icon_hero">40dp</dimen>
+    <dimen name="calendar_month_button_size">48dp</dimen>
+    <dimen name="calendar_month_icon_size">24dp</dimen>
+    <dimen name="calendar_weekday_text">14sp</dimen>
+    <dimen name="calendar_day_text">18sp</dimen>
+    <dimen name="calendar_rokuyo_text">10sp</dimen>
+    <dimen name="calendar_rokuyo_line_height">14dp</dimen>
+    <dimen name="calendar_rokuyo_margin_top">2dp</dimen>
+    <dimen name="calendar_day_circle_size">28dp</dimen>
+    <dimen name="calendar_visit_dot_size">5dp</dimen>
+    <dimen name="calendar_visit_dot_margin_top">2dp</dimen>
+    <dimen name="calendar_day_vertical_padding">0dp</dimen>
     <dimen name="mkarte_screen_padding">16dp</dimen>
     <dimen name="mkarte_form_screen_padding">20dp</dimen>
     <dimen name="mkarte_form_card_padding_horizontal">24dp</dimen>

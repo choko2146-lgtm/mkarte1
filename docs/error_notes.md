@@ -109,6 +109,51 @@
 - 
 ```
 
+## Step20B-1 カレンダー来店日ドットが表示されない
+
+分類:
+
+- 実機不具合 / カレンダー / 表示レイアウト
+
+発生日:
+
+- 2026-07-27
+
+エラー内容:
+
+- Kizitonwose Calendar移行後、撮影履歴がある日付でも来店日ドットが実画面で見えなかった。
+- 正の確認対象である2026年7月8日は撮影履歴が1件表示されるが、日付セルの黒いドットが見えなかった。
+
+発生条件:
+
+- Galaxy SC-03L `RF8M50DL2NA` でカレンダー画面の2026年7月を表示した時。
+- 六曜表示追加後の日付セルで発生した。
+
+原因:
+
+- 実機のKizitonwose日付セル行高に対して、日付数字、六曜、ドット、余白の合計高さが大きすぎた。
+- 日付数字と六曜でセルの表示領域を使い切り、ドットがセル下端へ押し出されてクリップされていた。
+- 来店日一覧の取得、`LocalDate`変換、Binder上の来店日判定、`visitDot`のvisibility制御は成立していた。
+
+解決方法:
+
+- 日付セル内の表示順は「日付数字、六曜、来店日ドット」のまま維持した。
+- 日付円、六曜行高、六曜文字サイズ、ドットサイズ、セル上下padding、ドット上marginを小さくし、ドットがセル内に収まるようにした。
+- Binderの `visitDot.setVisibility(hasVisitHistory ? View.VISIBLE : View.INVISIBLE);` は維持し、DB構造、六曜計算、祝日判定、カレンダーライブラリは変更しなかった。
+
+解決後の効果:
+
+- 2026年7月8日のドットが実機スクリーンショットで黒い点として視認できるようになった。
+- 2026年7月8日選択後、別日選択後、前月/翌月ボタンで戻った後、月スワイプで戻った後もドットが残ることを確認した。
+- 2026年7月7日は撮影履歴なし、ドットなしで表示された。
+- 5週表示と6週表示で撮影履歴カードや下部ナビゲーションとの重なりはなかった。
+- `testDebugUnitTest` と `assembleDebug` は成功し、対象アプリのLogcatにクラッシュや例外はなかった。
+
+関連ファイル:
+
+- `app/src/main/res/layout/item_calendar_day.xml`
+- `app/src/main/res/values/dimens.xml`
+
 ## 新規顧客登録ができない
 
 発生日:
@@ -221,6 +266,54 @@ if (isEditMode()) {
 解決後の効果:
 
 - `assembleDebug` が成功した。
+
+関連ファイル:
+
+- なし
+
+## Gradleビルド時のJDK参照問題
+
+分類:
+
+- Gradle
+
+発生日:
+
+- 2026-07-25
+
+エラー内容:
+
+- 通常のGradle daemonを使用して`assembleDebug --console=plain`を実行すると、`:app:compileDebugJavaWithJavac`で失敗した。
+- `jlink executable C:\Users\YRhei\.vscode\extensions\redhat.java-1.55.0-win32-x64\jre\21.0.11-win32-x86_64\bin\jlink.exe does not exist.`
+
+発生条件:
+
+- Kizitonwose Calendar導入時の実装言語選定調査のベースラインビルド確認時。
+- `JAVA_HOME`にはAndroid Studio付属JBRを指定していたが、通常のGradle daemonが既存のVS Code拡張内JRE参照を使っていた。
+
+原因:
+
+- Gradle daemonが参照しているJava環境と、Android Studio付属JBRの参照先が一致していない可能性がある。
+- アプリ本体のソース、Gradle設定、DB構造、レイアウトXMLに起因するエラーではない。
+
+解決方法:
+
+- Android Studio付属JBRを`JAVA_HOME`へ明示した。
+- 既存daemonを使わないよう`--no-daemon`を付けて再実行した。
+
+```powershell
+$env:JAVA_HOME='C:\Program Files\Android\Android Studio\jbr'
+.\gradlew.bat assembleDebug --console=plain --no-daemon
+```
+
+解決後の効果:
+
+- `BUILD SUCCESSFUL`を確認した。
+
+今後の対応:
+
+- Codexによるビルド確認で通常実行が同様のJDK参照問題で失敗した場合は、Android Studio付属JBRを`JAVA_HOME`へ明示し、`--no-daemon`付きで再実行する。
+- `.idea/deviceManager.xml`は今回の変更ではないため、編集・削除・commit対象への追加をしない。
 
 関連ファイル:
 

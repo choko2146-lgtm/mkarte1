@@ -1,5 +1,211 @@
 # Next Tasks
 
+## Step20 Calendar Migration / Rokuyo / Holiday / Visit Dot
+
+Status:
+
+- Step20: カレンダー基盤移行・六曜・祝日・来店日ドット対応
+- 状態: 完了
+- Galaxy実機確認: OK
+- ユーザー実機確認: OK
+- Commit対象として整理済み。
+
+Completed:
+
+- Step20A: Kizitonwose Calendar View `2.10.1` migration with `CalendarActivity` kept in Java.
+- Step20B: Rokuyo and Japanese holiday display.
+- Step20B-1: Visit-day dot clipping fix.
+- Step20B-2: Calendar/history vertical spacing adjustment.
+- Unit tests and Debug APK build passed in the implementation pass.
+- Galaxy SC-03L APK overwrite install, Logcat check, and user visual/operation review are OK.
+
+Next Calendar Checks:
+
+- Provide a confirmation APK for Pixel 6a if needed.
+- Check calendar display on Pixel 6a.
+- Adjust only if a Pixel-specific issue is found.
+
+Next Candidate Tasks:
+
+- Empty-state text and display cleanup.
+- Missing photo-file display improvement.
+- CSV export improvement.
+- Backup feature planning.
+
+## Step20B-2 Calendar Vertical Spacing Adjustment
+
+Status:
+
+- 実装完了・Galaxy実機確認済み・ユーザー見た目確認OK。
+- Unit tests passed.
+- `assembleDebug --console=plain --no-daemon` passed.
+- Galaxy SC-03L `RF8M50DL2NA` real-device check completed with APK overwrite install.
+- Scope was limited to calendar/history vertical area allocation and date-cell vertical spacing.
+- No CalendarActivity, Binder logic, Rokuyo calculation, Japanese holiday calculation, visit-date detection, DB, Gradle, Kotlin, or Compose changes were added.
+
+Confirmed on Galaxy:
+
+- Calendar display area is taller than Step20B-1.
+- Shooting-history card area is smaller but still shows the title and at least one history row when data exists.
+- 2026-07 5-week display has wider week-to-week vertical spacing.
+- 2026-07 does not reserve an unnatural empty 6th row.
+- 2026-07 existing visit dots are visible on 7/2, 7/8, and 7/9.
+- 2026-07-08 selected state keeps the visit dot visible.
+- 2026-07-20 holiday display remains red and includes `海の日`.
+- 2026-08 6-week display fully fits, including the final row.
+- Previous/next month buttons work.
+- Month swipe works.
+- History row opens customer detail and Back returns to the calendar.
+- No overlap with the shooting-history card or bottom navigation.
+- No app crash or exception stack in filtered Logcat.
+
+Notes:
+
+- 2026-07-16 had no existing visit record in the checked device data, so no dot was expected or forced.
+- `docs/error_notes.md` was not updated for Step20B-2 because no new display bug, crash, build error, or runtime exception occurred during this adjustment.
+
+Next:
+
+- Pixel device confirmation if needed.
+- After Pixel confirmation if needed, adjust only if a device-specific issue is found.
+
+## Step20B-1 Visit Dot Display Fix
+
+Status:
+
+- Completed on 2026-07-27.
+- Unit tests passed.
+- `assembleDebug --console=plain --no-daemon` passed.
+- Galaxy SC-03L `RF8M50DL2NA` real-device check completed with APK overwrite install.
+- Scope was limited to the visit-day dot layout fix.
+- No Kotlin, Compose, DB, Entity, DAO, Migration, photo-storage, CSV, calendar-library, Rokuyo calculation, or Japanese holiday calculation changes were added.
+
+Confirmed on Galaxy:
+
+- 2026-07-08 has 1 shooting-history row in the existing device data.
+- 2026-07-08 Binder/accessibility state is `来店記録あり`.
+- 2026-07-08 visit dot is visible in the real screenshot.
+- 2026-07-08 visit dot actual bounds are 13px x 13px and inside the date cell.
+- Dot is under Rokuyo and does not overlap Rokuyo.
+- Dot remains visible when 2026-07-08 is selected.
+- Dot remains visible after selecting another date.
+- Dot remains visible after previous/next month button navigation.
+- Dot remains visible after month swipe navigation.
+- Negative target 2026-07-07 has no shooting history and no visit dot.
+- 2026-07 5-week display is normal.
+- 2026-08 6-week display is normal. Existing data had no August visit dots.
+- Shooting-history row opens `CustomerDetailActivity`; Back returns to `CalendarActivity`.
+- No overlap with the shooting-history card or bottom navigation.
+- No app crash or exception stack in filtered Logcat.
+
+Next:
+
+- Pixel device confirmation if needed.
+- Step20B-1 is complete.
+
+## Step20B Rokuyo And Japanese Holiday Display
+
+Status:
+
+- Implemented.
+- Unit tests passed.
+- `assembleDebug --console=plain --no-daemon` passed.
+- Galaxy SC-03L `RF8M50DL2NA` real-device check completed with APK overwrite install.
+- No Kotlin, Compose, DB, Entity, DAO, Migration, photo-storage, CSV, or external runtime API changes were added.
+
+Confirmed on Galaxy:
+
+- Initial calendar display
+- Sunday-to-Saturday 7 columns
+- In-month dates present
+- Month title
+- Previous/next month buttons
+- Month swipe
+- Date selection and selected background movement
+- Today background after selecting another date
+- Sunday red, Saturday blue, holiday red
+- Rokuyo display in all in-month cells
+- Visit-dot persistence confirmed in Step20B-1 using 2026-07-08 existing data
+- Calendar-history-to-customer-detail navigation confirmed in Step20B-1
+- 5-week display
+- 6-week display and 6th-row date selection
+- No overlap with the shooting-history card or bottom navigation
+- No app crash or exception stack in filtered Logcat
+
+Not confirmed in this pass:
+
+- Pixel 6a device confirmation.
+- Final user review of visual balance, tap feel, and Master UI fit was completed after Step20B-2.
+
+Next:
+
+- If needed, provide the same APK for Pixel 6a confirmation.
+- Step20B is complete.
+
+## Step20A Kizitonwose Calendar移行・Galaxy実機確認済み
+
+状態:
+
+- `CalendarActivity`はJavaのまま、Kizitonwose Calendar View版 `2.10.1` へ移行済み。
+- `assembleDebug --console=plain --no-daemon` 成功。
+- Galaxy `RF8M50DL2NA` がADBで`device`状態になったことを確認済み。
+- 既存データを保持したままDebug APKを上書きインストール済み。
+- Galaxy実機でカレンダー基本操作、5週表示、6週表示、撮影履歴更新、顧客詳細遷移、戻る操作、Logcat確認まで完了。
+- Kizitonwose移行に直接関係する不具合は見つからず、追加修正なし。
+
+実装済み内容:
+
+- Kizitonwose Calendar View版の依存関係追加。
+- `minSdk 24`対応のためCore Library Desugaringを追加。
+- Android標準`CalendarView`をKizitonwose `CalendarView`へ置き換え。
+- 月タイトル、前月/翌月ボタン、曜日行、日付選択、今日表示、選択日表示を実装。
+- 撮影日ドットを既存の`Photo.takenDate` / `PhotoRepository.listTakenDates()`から表示。
+- 選択日の撮影履歴取得、顧客名と写真枚数の集約、履歴タップで顧客詳細へ遷移する既存仕様を維持。
+- Activity再表示時に撮影日ドットと撮影履歴が更新されるようにした。
+- 下部ナビゲーションとEdge-to-Edge / Insets対応を維持。
+
+確認済み:
+
+- Galaxy実機へのAPK上書きインストール。
+- カレンダー初期表示。
+- 日曜から土曜までの7列表示。
+- 当月日付の欠けなし。
+- 年月タイトル。
+- 前月/翌月移動。
+- 月スワイプ。
+- 日付選択と選択背景の移動。
+- 今日の淡い水色背景。
+- 日曜日の赤色、土曜日の青色。
+- 撮影日ドットと日付選択後のドット維持。
+- 選択日の撮影履歴更新。
+- 撮影履歴行から顧客詳細への遷移と戻る操作。
+- 5週表示と6週表示。
+- 撮影履歴カード、下部ナビゲーションとの重なりなし。
+- Logcatで対象アプリ由来のクラッシュ/例外なし。
+
+未確認:
+
+- Pixel実機確認。
+
+次に行うこと:
+
+- 必要ならPixel実機でも最終確認する。
+- Pixelで問題が出た場合のみ機種差調整を行う。
+
+実機確認後の次候補:
+
+- Pixel実機最終確認。
+
+引き続き含めない:
+
+- 六曜表示。
+- 新しい祝日処理。
+- 祝日データの追加。
+- Visit Entity / Visitテーブル。
+- DB Migration。
+- 写真保存仕様の変更。
+- CSV仕様の変更。
+
 ## Step19C 完了
 
 完了内容:

@@ -1,5 +1,237 @@
 # Current Status
 
+## Step20 Final Completion
+
+Status:
+
+- Step20A through Step20B-2 are complete.
+- User Galaxy real-device confirmation is OK.
+- Calendar display and operation are accepted by the user on Galaxy SC-03L.
+- Pixel 6a final display confirmation remains a future check only.
+
+Completed Scope:
+
+- Step20A: Migrated the calendar screen to Kizitonwose Calendar View `2.10.1`.
+- Step20B: Added Rokuyo and Japanese holiday display.
+- Step20B-1: Fixed the visit-day dot clipping issue after Rokuyo was added.
+- Step20B-2: Adjusted the calendar/history vertical area balance and week-to-week spacing.
+
+Step20A Summary:
+
+- `CalendarActivity` remains Java.
+- Kizitonwose Calendar View `2.10.1` is used.
+- Core Library Desugaring was added for `java.time` on `minSdk 24`.
+- Month display, previous/next month movement, month swipe, date selection, today background, Sunday/Saturday colors, visit-day dots, and shooting-history updates were reproduced on the new calendar.
+- Existing MaterialCalendarView-related replacement scope was completed; the actual previous implementation in this repository was Android standard `CalendarView`, not an external MaterialCalendarView dependency.
+- Galaxy real-device confirmation is OK.
+
+Step20B Summary:
+
+- Rokuyo display was implemented with local Java helper classes.
+- Japanese national holiday detection was implemented with a local Java helper class.
+- Rokuyo is calculated locally from an internal Japanese lunisolar-calendar table.
+- Holidays are detected locally on device; no external runtime API or network call is used.
+- Holiday date numbers are displayed in red.
+- Rokuyo/holiday unit tests passed.
+- Galaxy real-device confirmation is OK.
+
+Step20B-1 Summary:
+
+- Fixed the issue where visit-day dots were clipped at the bottom of the date cell after Rokuyo was added.
+- Data loading, visit-date judgment, and Binder visibility logic were confirmed to be normal.
+- The issue was fixed by adjusting date-cell dimensions and spacing.
+- Visit dots were visually confirmed on dates with existing visit records.
+- Dot persistence was confirmed after selection, after selecting another date, and after month navigation.
+- Galaxy real-device confirmation is OK.
+
+Step20B-2 Summary:
+
+- Increased the calendar display area.
+- Reduced the shooting-history area to an appropriate size while keeping the title and at least one visible row.
+- Changed 5-week months so an unnecessary empty 6th row is not reserved.
+- Kept the date number, Rokuyo, and visit-dot sizes from Step20B-1.
+- Added vertical spacing so week-to-week distance is closer to the Master UI.
+- 5-week and 6-week displays were both confirmed.
+- User real-device confirmation for visual balance and operation is OK.
+
+Test And Build:
+
+- `testDebugUnitTest --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- `assembleDebug --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- Debug APK was installed on Galaxy SC-03L with `adb install -r`.
+- Filtered Logcat showed no app crash or exception stack.
+- DB structure was not changed.
+- No Migration was added.
+- Kotlin and Compose were not introduced.
+
+Future Checks:
+
+- Pixel 6a final display confirmation is planned for a later pass.
+- Device-specific layout adjustment should be done only if the Pixel check finds an actual issue.
+
+## Step20B-2 Calendar Vertical Spacing Adjustment
+
+Status:
+
+- Implemented and Galaxy SC-03L checked on 2026-07-27.
+- Status: implemented, Galaxy real-device checked, user visual/operation review OK.
+- Scope was limited to calendar/history vertical area allocation and date-cell vertical spacing.
+- CalendarActivity, Binder logic, Rokuyo calculation, Japanese holiday calculation, visit-date detection, DB, Gradle, Kotlin, and Compose were not changed.
+
+Symptom:
+
+- After Rokuyo, holiday, and visit-dot display were working, the Galaxy SC-03L calendar still looked vertically tight.
+- Week-to-week spacing was narrow, and the calendar had less breathing room than the Master UI.
+- The shooting-history card could safely be smaller, while still keeping its title and at least one visible history row.
+
+Fix:
+
+- Increased the calendar card weight from `1.35` to `1.55`.
+- Reduced the shooting-history card weight from `1` to `0.85`.
+- Changed Kizitonwose `cv_outDateStyle` from `endOfGrid` to `endOfRow`, so 5-week months do not reserve an empty 6th row and can distribute the calendar height across the visible weeks.
+- Kept date, Rokuyo, and dot sizes from Step20B-1.
+- Added 2dp vertical gaps between the date number/Rokuyo and Rokuyo/visit dot.
+- Card corner radius, border, colors, bottom navigation, and history row UI were not changed.
+
+Before/After Metrics On Galaxy:
+
+- Before Step20B-2: CalendarView bounds were `[63,406][1017,1149]` and 2026-07-08 cell bounds were `[471,529][607,653]`.
+- After Step20B-2: CalendarView bounds are `[63,406][1017,1275]` and 2026-07-08 cell bounds are `[471,579][607,753]`.
+- CalendarView height increased from 743px to 869px, about 48dp at density 420.
+- 2026-07-08 visible cell height increased from 124px to 174px.
+- Shooting-history card bounds changed to `[42,1338][1038,1964]`, keeping the title and one visible row.
+
+Verified:
+
+- `testDebugUnitTest --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- `assembleDebug --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- Debug APK: `app/build/outputs/apk/debug/app-debug.apk`
+- Galaxy `RF8M50DL2NA`: `device`
+- Device: Samsung SC-03L / Android 12 / density 420
+- `adb install -r app/build/outputs/apk/debug/app-debug.apk` succeeded with existing data preserved.
+- 2026-07 5-week display: rows are visually more open, no extra empty 6th row is reserved, and there is no overlap with the shooting-history card or bottom navigation.
+- 2026-07 visible visit dots: existing data showed dots on 2026-07-02, 2026-07-08, and 2026-07-09. 2026-07-16 had no existing visit record, so no dot was expected there.
+- 2026-07-08 selected state: dot remained visible under Rokuyo, with bounds `[532,720][545,733]`.
+- 2026-07-20 holiday display: content description included `海の日`, and the date was visually red.
+- 2026-07-08 shooting-history card showed 1 row, and the row remained tappable.
+- History row opened `CustomerDetailActivity`; Android Back returned to `CalendarActivity`.
+- 2026-08 6-week display: all rows including 2026-08-31 were fully visible. 2026-08-31 bounds were `[199,1130][335,1275]`.
+- Previous/next month buttons worked.
+- Month swipe to 2026-08 and back to 2026-07 worked.
+- After swipe back, 2026-07 showed 3 visible visit-dot nodes and the 2026-07-08 dot stayed visible.
+- Screenshots were saved outside Git-managed paths and opened for visual confirmation.
+- Filtered Logcat for the app PID showed no app crash or exception stack.
+
+Remaining:
+
+- Pixel device confirmation if needed.
+
+## Step20B-1 Visit Dot Display Fix
+
+Status:
+
+- Implemented and Galaxy SC-03L checked on 2026-07-27.
+- Scope was limited to the visit-day dot display bug.
+- CalendarActivity remains Java.
+- Kizitonwose Calendar View remains `2.10.1`.
+- No Kotlin, Compose, DB schema, Entity, DAO, Migration, photo-storage, CSV, calendar-library, Rokuyo calculation, or Japanese holiday calculation changes were added.
+
+Symptom:
+
+- On 2026-07-08, the shooting history card showed 1 history row, but the black visit-day dot was not visible in the calendar date cell.
+
+Cause:
+
+- The Kizitonwose date cell row height on Galaxy SC-03L was about 47dp.
+- The previous vertical layout used a 36dp date circle, 16dp Rokuyo line, 6dp dot, 2dp dot top margin, and 2dp top/bottom cell padding.
+- Date number and Rokuyo consumed the visible cell height, so the dot was pushed to the bottom edge/outside the cell and clipped.
+- The visit-date data and Binder judgment were correct; the issue was layout height/positioning.
+
+Fix:
+
+- Compacted only the date-cell dimensions so the order remains date number, Rokuyo, visit dot.
+- `calendar_day_circle_size`: 36dp -> 28dp.
+- `calendar_rokuyo_text`: 11sp -> 10sp.
+- `calendar_rokuyo_line_height`: 16dp -> 14dp.
+- `calendar_visit_dot_size`: 6dp -> 5dp.
+- `calendar_day_vertical_padding`: 2dp -> 0dp.
+- `viewCalendarVisitDot` top margin: 2dp -> 0dp.
+- `textCalendarRokuyo` uses `includeFontPadding=false` to keep the 14dp line stable.
+- Binder logic still resets the dot every bind and uses `visitDot.setVisibility(hasVisitHistory ? View.VISIBLE : View.INVISIBLE);`.
+
+Verified:
+
+- `testDebugUnitTest --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- `assembleDebug --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- Debug APK: `app/build/outputs/apk/debug/app-debug.apk`
+- Galaxy `RF8M50DL2NA`: `device`
+- Device: Samsung SC-03L / Android 12 / SDK 31 / override size 1080x2280 / density 420
+- `adb install -r app/build/outputs/apk/debug/app-debug.apk` succeeded with existing data preserved.
+- 2026-07-08: shooting history row count was 1.
+- 2026-07-08 Binder/accessibility state: `来店記録あり`.
+- 2026-07-08 cell bounds were `[471,529][607,653]`.
+- 2026-07-08 visit-dot bounds were `[532,640][545,653]`, so the actual dot size was 13px x 13px and fully inside the cell.
+- Screenshots were saved outside Git-managed paths and opened for visual confirmation.
+- 2026-07 full screen: black dot was visible under 2026-07-08.
+- 2026-07-08 selected state: black dot remained visible under Rokuyo and did not overlap the selection background.
+- Selecting 2026-07-07 after 2026-07-08 kept the 2026-07-08 dot visible.
+- Negative target 2026-07-07: no shooting history, no visit-dot node, empty-history message shown.
+- Previous-month button to 2026-06 and next-month button back to 2026-07 kept the 2026-07-08 dot visible.
+- Month swipe to 2026-08 and swipe back to 2026-07 kept the 2026-07-08 dot visible.
+- 2026-07 5-week display showed no overlap with the shooting-history card or bottom navigation.
+- 2026-08 6-week display showed no overlap with the shooting-history card or bottom navigation. Existing data had no August visit dots.
+- History row from 2026-07-08 opened `CustomerDetailActivity`; Android Back returned to `CalendarActivity` with the selected date and dot still visible.
+- Filtered Logcat for the app PID showed no app crash or exception stack.
+- commit / push were not performed.
+
+Remaining:
+
+- Pixel device confirmation if needed.
+
+## Step20B Rokuyo And Japanese Holiday Display
+
+Status:
+
+- Implemented and Galaxy SC-03L checked on 2026-07-26.
+- Calendar screen remains Java.
+- Kizitonwose Calendar View remains `2.10.1`.
+- No Kotlin, Compose, DB schema, Entity, DAO, Migration, photo-storage, CSV, or external runtime API changes were added.
+
+Implemented:
+
+- Added local Java Rokuyo helpers: `JapaneseLunarDate`, `JapaneseLunarCalendarConverter`, `Rokuyo`, `RokuyoCalculator`.
+- Added local Java Japanese holiday helper: `JapaneseHolidayCalculator`.
+- Calendar date cells now display date number, Rokuyo, and visit dot in a vertical layout.
+- Holiday dates are rendered red. Holiday names are included in accessibility text but are not shown inside cells.
+- Date text color priority is holiday, Sunday, Saturday, normal weekday.
+- Selected date background has priority over today background. Today background returns when another date is selected.
+- Binder reset covers date text, Rokuyo text, text colors, backgrounds, content description, clickability, and dot visibility.
+- Rokuyo clipping found on the first Galaxy screenshot was fixed by giving the Rokuyo TextView a fixed line height and keeping font padding.
+
+Verified:
+
+- `testDebugUnitTest --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- `assembleDebug --console=plain --no-daemon`: `BUILD SUCCESSFUL`
+- Debug APK: `app/build/outputs/apk/debug/app-debug.apk`
+- Galaxy `RF8M50DL2NA`: `device`
+- Device: Samsung SC-03L / Android 12 / SDK 31 / override size 1080x2280 / density 420
+- `adb install -r` succeeded with existing data preserved.
+- App launched and CalendarActivity focus was confirmed.
+- Initial display, 7 columns, month title, previous/next buttons, month swipe, date selection, selected background movement, today background, Sunday red, Saturday blue, holiday red, Rokuyo display, 5-week month, 6-week month, 6th-row selection, and no overlap with the history card/bottom navigation were confirmed by screenshots.
+- Checked months did not show visible visit dots or visit history rows, so customer-detail transition from calendar history was not confirmed in this pass.
+- Visit-dot persistence and calendar-history-to-customer-detail navigation were confirmed in later Step20B-1 / Step20B-2 checks using existing device data.
+- Filtered Logcat did not show app crash or exception stack.
+
+Documentation:
+
+- `docs/calendar_rokuyo_holiday_implementation.md` added.
+- `docs/error_notes.md` was not updated because no new crash, build error, or calculation runtime failure occurred.
+
+Remaining:
+
+- Pixel 6a confirmation if needed.
+- Future review for official holiday-law changes and exceptional old-calendar/Rokuyo source differences.
+
 ## Maintenance Note
 
 作業終了ごとに、このファイルを更新すること。
@@ -524,3 +756,72 @@ Pictures/Okannokarte/
 - Step19C 実機確認OK。
 - 残差異として、保存ボタン左アイコンがMaster UIより少し大きく左寄りに見えるが、軽微な追加調整候補として `docs/next_tasks.md` に記録済み。
 - push は未実施。
+
+## Step20 Kizitonwose Calendar導入時の実装言語選定調査
+
+調査内容:
+
+- 現在のAndroid標準`CalendarView`からKizitonwose Calendar View版へ移行する前に、カレンダー画面をJavaのまま実装する案と、カレンダー画面だけKotlinにする案を比較した。
+- 公式GitHub、公式View docs、Maven Central、Android Developers、Kotlin公式情報を確認した。
+- 調査時点のKizitonwose Calendar View版は`com.kizitonwose.calendar:view:2.10.1`を対象にした。
+- `javap`で`CalendarView`、`ViewContainer`、`MonthDayBinder`、`CalendarDay`、`CalendarMonth`、`DayPosition`のJava向けシグネチャを確認した。
+- リポジトリ外の一時ディレクトリで、Javaの最小コードが`MonthDayBinder`、`setup(...)`、`scrollToMonth(...)`、`notifyDateChanged(...)`、`notifyMonthChanged(...)`、月スクロールリスナーを呼び出してコンパイルできることを確認した。
+- 現在の`minSdk`は`24`のため、Kizitonwose Calendar移行時には`java.time`向けCore Library Desugaringが必要。
+
+採用方針:
+
+- `CalendarActivityはJavaのまま実装する`を推奨案として採用。
+- Javaから必要APIを呼び出せること、既存コードがJava中心であること、Kotlin Android plugin追加を避けて移行差分を小さくできることを重視した。
+- Kotlin案は公式サンプルに近い利点はあるが、現状のプロジェクトではGradle変更とJava/Kotlin混在の管理負担が増えるため不採用。
+
+確認:
+
+- ベースラインとして `assembleDebug --console=plain --no-daemon` 成功。
+- アプリ本体のソース、Gradle設定、レイアウトXML、DB構造は変更していない。
+- Kizitonwose Calendarのライブラリ移行実装はまだ行っていない。
+- 調査詳細は `docs/calendar_kizitonwose_language_investigation.md` に記録済み。
+
+## Step20A Kizitonwose Calendar View版への移行
+
+実装内容:
+
+- カレンダー画面をJavaのまま維持し、Kizitonwose Calendar View版 `com.kizitonwose.calendar:view:2.10.1` へ移行した。
+- 現行コード上は外部MaterialCalendarView依存ではなくAndroid標準`CalendarView`を使用していたため、MaterialCalendarView依存関係やDecoratorの削除対象は存在しなかった。
+- `gradle/libs.versions.toml` と `app/build.gradle.kts` にKizitonwose Calendar View版を追加した。
+- `minSdk 24`で`java.time.LocalDate` / `YearMonth`を使うため、Core Library Desugaringを追加した。
+- `activity_calendar.xml` のカレンダー領域をKizitonwose `CalendarView`へ置き換え、月タイトル、前月/翌月ボタン、曜日行、撮影履歴カード、下部ナビゲーションを維持した。
+- `item_calendar_day.xml` を追加し、日付数字、今日の淡い水色背景、選択日の淡いピンク背景、撮影日ドットを表示できる日付セルにした。
+- `CalendarActivity.java` にJavaの`MonthDayBinder` / `ViewContainer`実装を追加し、セル再利用時に日付文字、文字色、背景、ドット、クリック可否、表示状態を毎回初期化するようにした。
+- 表示期間は現在月を基準に過去20年から未来10年までに設定した。既存写真データと今後の利用を妨げにくく、極端に広すぎない範囲として採用。
+- 日曜日始まりで、日曜は赤、土曜は青、平日は通常色にした。
+- 撮影日ドットは既存の`PhotoRepository.listTakenDates()` / `PhotoDao.getDistinctTakenDates()` / `Photo.takenDate`を使用し、DB構造や保存形式は変更していない。
+- 日付選択時は旧選択日と新選択日だけを`notifyDateChanged(...)`で再描画し、選択日の撮影履歴を既存の`PhotoRepository.listForDate(...)`で取得する。
+- `onResume()`時に撮影日ドットと選択日の撮影履歴を再取得するようにした。
+- 六曜表示、新しい祝日計算処理、新しい祝日ライブラリ、外部API、Kotlin plugin、Kotlinファイル、Composeは追加していない。
+- 既存コードには祝日判定ロジックがなかったため、このStepでは新しい祝日表示を追加していない。
+- Room DB構造、Entity、DAOの既存仕様、Migration、写真保存処理、MediaStore処理、CSV処理、ManifestのActivity名は変更していない。
+
+確認:
+
+- `assembleDebug --console=plain --no-daemon` 成功。
+- `compileDebugKotlin NO-SOURCE`を確認し、Kotlinファイル追加なし。
+- MaterialCalendarView参照なし。
+- Kizitonwose Calendar参照あり。
+- Debug APK生成確認: `app/build/outputs/apk/debug/app-debug.apk`
+- ADBフルパス `C:\Users\YRhei\AppData\Local\Android\Sdk\platform-tools\adb.exe` を確認。
+- `adb devices`でGalaxy `RF8M50DL2NA` は検出されたが、状態が`unauthorized`だった。
+- USBデバッグ許可完了の連絡後にADB接続を再確認し、PC側で`adb kill-server` / `adb start-server`も実行したが、`RF8M50DL2NA` は引き続き`unauthorized`だった。
+- その後、`adb devices`でGalaxy `RF8M50DL2NA` が`device`状態になったことを確認した。
+- 端末情報: Samsung SC-03L / Android 12 / SDK 31 / device `SC-03L`。
+- 既存データを保持したまま `adb install -r app/build/outputs/apk/debug/app-debug.apk` を実行し、`Success`を確認した。
+- Logcatをクリア後、Launcher Activityからアプリを起動し、下部ナビゲーションでカレンダー画面へ移動した。
+- `dumpsys window`で `com.example.mkarte1/.ui.calendar.CalendarActivity` がフォーカスされていることを確認した。
+- Galaxy実機で、カレンダー初期表示、日曜始まりの7列表示、当月日付の欠けなし、年月タイトル、前月/翌月ボタン、月スワイプ、日付選択、選択背景の移動、今日の淡い水色背景、日曜赤色、土曜青色を確認した。
+- 撮影日ドット、日付選択後もドットが消えないこと、選択日の撮影履歴更新、撮影履歴ありの日付から顧客詳細へ遷移して戻れることを確認した。
+- 2026年7月で5週表示、2026年8月で6週表示を確認した。
+- 主要状態のスクリーンショットを一時保存し、画像を開いてカレンダー、撮影履歴カード、下部ナビゲーションに重なりがないことを確認した。
+- 対象アプリのLogcatでクラッシュや例外は確認されなかった。
+- Kizitonwose移行に直接関係する不具合は見つからず、追加修正は行っていない。
+- Pixel実機は未確認。
+- ユーザーによるGalaxy実機確認で、見た目、余白、文字サイズ、タップ感、月移動、Master UIとのバランスはOK。
+- commit / push は未実施。
